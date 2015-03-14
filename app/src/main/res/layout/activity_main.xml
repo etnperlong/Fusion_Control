@@ -1,0 +1,142 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity">
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/card_view"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        card_view:cardCornerRadius="4dp"
+        android:layout_alignParentBottom="true">
+
+    <RelativeLayout
+         android:layout_width="match_parent"
+         android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/textview1"
+                android:layout_alignParentTop="true"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/card_title"
+                android:textSize="20sp"
+                android:paddingStart="85dp"
+                android:background="#2E7D32"
+                android:textColor="#FFFFFF"/>
+
+
+            <Switch
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/double_tap"
+                android:id="@+id/switch1"
+                android:onClick="onClickDouble"
+                android:layout_alignParentTop="true"
+                android:paddingTop="55dp"
+                android:paddingBottom="20dp"
+                android:layout_alignEnd="@+id/switch2" />
+
+            <Switch
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/swipe_up"
+                android:id="@+id/switch2"
+                android:onClick="onClickSwipeUp"
+                android:layout_centerHorizontal="true"
+                android:paddingBottom="20dp"
+                android:layout_below="@+id/switch1" />
+
+            <Switch
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/swipe_down"
+                android:id="@+id/switch3"
+                android:onClick="onClickSwipeDown"
+                android:paddingBottom="20dp"
+                android:layout_below="@+id/switch2"
+                android:layout_alignEnd="@+id/switch2" />
+
+            <Switch
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/swipe_right"
+                android:id="@+id/switch4"
+                android:onClick="onClickSwipeRight"
+                android:layout_centerHorizontal="true"
+                android:paddingBottom="20dp"
+                android:layout_below="@+id/switch3"
+                android:layout_alignEnd="@+id/switch2" />
+
+            <Switch
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/swipe_left"
+                android:id="@+id/switch5"
+                android:onClick="onClickSwipeLeft"
+                android:layout_centerHorizontal="true"
+                android:paddingBottom="20dp"
+                android:layout_below="@+id/switch4"
+                android:layout_alignEnd="@+id/switch2"/>
+
+            <Switch
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/draw_e"
+                android:id="@+id/switch6"
+                android:onClick="onClickDraw_E"
+                android:layout_centerHorizontal="true"
+                android:paddingBottom="20dp"
+                android:layout_below="@+id/switch5"
+                android:layout_alignEnd="@+id/switch2"/>
+
+            <Switch
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/draw_o"
+                android:id="@+id/switch7"
+                android:onClick="onClickDraw_O"
+                android:layout_centerHorizontal="true"
+                android:paddingBottom="20dp"
+                android:layout_below="@+id/switch6"
+                android:layout_alignEnd="@+id/switch2"/>
+
+            <Switch
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/draw_w"
+                android:id="@+id/switch8"
+                android:onClick="onClickDraw_W"
+                android:layout_centerHorizontal="true"
+                android:paddingBottom="20dp"
+                android:layout_below="@+id/switch7"
+                android:layout_alignEnd="@+id/switch2"/>
+
+            <Switch
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/draw_m"
+                android:id="@+id/switch9"
+                android:onClick="onClickDraw_M"
+                android:layout_centerHorizontal="true"
+                android:paddingBottom="20dp"
+                android:layout_below="@+id/switch8"
+                android:layout_alignEnd="@+id/switch2"/>
+
+            <Switch
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/draw_c"
+                android:id="@+id/switch10"
+                android:onClick="onClickDraw_C"
+                android:layout_centerHorizontal="true"
+                android:paddingBottom="20dp"
+                android:layout_below="@+id/switch9"
+                android:layout_alignEnd="@+id/switch2"/>
+         </RelativeLayout>
+    </android.support.v7.widget.CardView>
+
+</RelativeLayout>

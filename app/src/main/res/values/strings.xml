@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Fusion Control</string>
+    <string name="double_tap">Double Tap</string>
+    <string name="swipe_up">Swipe Up</string>
+    <string name="swipe_down">Swipe Down</string>
+    <string name="swipe_right">Swipe Right</string>
+    <string name="swipe_left">Swipe Left</string>
+    <string name="draw_e">Draw \'E\'</string>
+    <string name="draw_o">Draw \'O\'</string>
+    <string name="draw_w">Draw \'W\'</string>
+    <string name="draw_c">Draw \'C\'</string>
+    <string name="draw_m">Draw \'M\'</string>
+    <string name="card_title">Gesture Wakeups</string>
+    <string name="action_about">About</string>
+</resources>
