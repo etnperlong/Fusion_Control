@@ -65,7 +65,6 @@ public class MainActivity extends ActionBarActivity {
             );
             support.show();
         }
-        else{
 
             if(!check.hasRoot())
             {
@@ -84,9 +83,14 @@ public class MainActivity extends ActionBarActivity {
                 );
                 noRootAlert.show();
             }
+        long response=0;
+        try {
+            response = Long.decode(check.getResponse());
         }
-
-        long response = Long.decode(check.getResponse());
+        catch (NumberFormatException e)
+        {
+            e.printStackTrace();
+        }
 
         final boolean hasDoubleTapEnabled = (response & TW_SUPPORT_DOUBLE_CLICK_WAKEUP) != 0;
         final boolean hasSwipeUpEnabled = (response & TW_SUPPORT_UP_SLIDE_WAKEUP) != 0;

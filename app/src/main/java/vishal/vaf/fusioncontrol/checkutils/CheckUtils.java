@@ -46,9 +46,11 @@ public class CheckUtils {
     {
         if (Build.MODEL.equals("AO5510") | Build.DEVICE.equals("YUREKA") || Build.PRODUCT.equals("YUREKA"))
         {
+            Log.d(tag, "supported");
             return true;
         }
 
+        Log.d(tag, "not supported");
         return false;
     }
 
