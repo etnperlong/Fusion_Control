@@ -2,6 +2,7 @@ package vishal.vaf.fusioncontrol;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -296,7 +297,7 @@ public class MainActivity extends ActionBarActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_about) {
-            return true;
+            startActivity(new Intent(this, AboutActivity.class));
         }
 
         return super.onOptionsItemSelected(item);

@@ -12,4 +12,5 @@
     <string name="draw_m">Draw \'M\'</string>
     <string name="card_title">Gesture Wakeups</string>
     <string name="action_about">About</string>
+    <string name="title_activity_about">About Fusion Control</string>
 </resources>
