@@ -3,6 +3,7 @@ package vishal.vaf.fusioncontrol;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,6 +18,10 @@ import vishal.vaf.fusioncontrol.checkutils.CheckUtils;
 public class MainActivity extends ActionBarActivity {
 
     CheckUtils check = new CheckUtils();
+
+    SharedPreferences setOnBootSettings;
+
+    public static final String SOB_PREFS_NAME = "SetOnBoot";
 
     private static String CONTROL_PATH = "/sys/devices/virtual/touchscreen/touchscreen_dev/gesture_ctrl";
 
@@ -103,59 +108,138 @@ public class MainActivity extends ActionBarActivity {
         final boolean hasDraw_mEnabled = (response & TW_SUPPORT_M_SLIDE_WAKEUP) != 0;
         final boolean hasDraw_cEnabled = (response & TW_SUPPORT_C_SLIDE_WAKEUP) != 0;
 
+        setOnBootSettings = getSharedPreferences(SOB_PREFS_NAME, 0);
+        SharedPreferences.Editor editor = setOnBootSettings.edit();
+
         if(hasDoubleTapEnabled)
         {
             sw1.setChecked(true);
+            editor.putBoolean("double_click", true);
+            editor.apply();
+
         }
+        else {
+            editor.putBoolean("double_click", false);
+            editor.apply();
+        }
+
         if(hasSwipeUpEnabled)
         {
             sw2.setChecked(true);
+            editor.putBoolean("up", true);
+            editor.apply();
         }
+        else {
+            editor.putBoolean("up", false);
+            editor.apply();
+        }
+
         if(hasSwipeDownEnabled)
         {
             sw3.setChecked(true);
+            editor.putBoolean("down", true);
+            editor.apply();
         }
+        else {
+            editor.putBoolean("down", false);
+            editor.apply();
+        }
+
         if(hasSwipeRightEnabled)
         {
             sw4.setChecked(true);
+            editor.putBoolean("right", true);
+            editor.apply();
         }
+        else {
+            editor.putBoolean("right", false);
+            editor.apply();
+        }
+
         if(hasSwipeLeftEnabled)
         {
             sw5.setChecked(true);
+            editor.putBoolean("left", true);
+            editor.apply();
         }
+        else {
+            editor.putBoolean("left", false);
+            editor.apply();
+        }
+
         if(hasDraw_eEnabled)
         {
             sw6.setChecked(true);
+            editor.putBoolean("e", true);
+            editor.apply();
         }
+        else {
+            editor.putBoolean("e", false);
+            editor.apply();
+        }
+
         if(hasDraw_oEnabled)
         {
             sw7.setChecked(true);
+            editor.putBoolean("o", true);
+            editor.apply();
         }
+        else {
+            editor.putBoolean("o", false);
+            editor.apply();
+        }
+
         if(hasDraw_wEnabled)
         {
             sw8.setChecked(true);
+            editor.putBoolean("w", true);
+            editor.apply();
         }
+        else {
+            editor.putBoolean("w", false);
+            editor.apply();
+        }
+
         if(hasDraw_mEnabled)
         {
             sw9.setChecked(true);
+            editor.putBoolean("m", true);
+            editor.apply();
         }
+        else {
+            editor.putBoolean("m", false);
+            editor.apply();
+        }
+
         if(hasDraw_cEnabled)
         {
             sw10.setChecked(true);
+            editor.putBoolean("c", true);
+            editor.apply();
+        }
+        else {
+            editor.putBoolean("c", false);
+            editor.apply();
         }
     }
 
     public void onClickDouble(View view)
     {
         boolean state = ((Switch) view).isChecked();
+        setOnBootSettings = getSharedPreferences(SOB_PREFS_NAME, 0);
+        SharedPreferences.Editor editor = setOnBootSettings.edit();
 
         if (state)
         {
             check.setGesture("double_click", state);
+            editor.putBoolean("double_click", true);
+            editor.apply();
         }
         else
         {
             check.setGesture("double_click", state);
+            editor.putBoolean("double_click", false);
+            editor.apply();
         }
     }
 
@@ -163,13 +247,20 @@ public class MainActivity extends ActionBarActivity {
     {
         boolean state = ((Switch) view).isChecked();
 
+        setOnBootSettings = getSharedPreferences(SOB_PREFS_NAME, 0);
+        SharedPreferences.Editor editor = setOnBootSettings.edit();
+
         if (state)
         {
             check.setGesture("up", state);
+            editor.putBoolean("up", true);
+            editor.apply();
         }
         else
         {
             check.setGesture("up", state);
+            editor.putBoolean("up", false);
+            editor.apply();
         }
     }
 
@@ -177,13 +268,20 @@ public class MainActivity extends ActionBarActivity {
     {
         boolean state = ((Switch) view).isChecked();
 
+        setOnBootSettings = getSharedPreferences(SOB_PREFS_NAME, 0);
+        SharedPreferences.Editor editor = setOnBootSettings.edit();
+
         if (state)
         {
             check.setGesture("down", state);
+            editor.putBoolean("down", true);
+            editor.apply();
         }
         else
         {
             check.setGesture("down", state);
+            editor.putBoolean("down", false);
+            editor.apply();
         }
     }
 
@@ -191,13 +289,20 @@ public class MainActivity extends ActionBarActivity {
     {
         boolean state = ((Switch) view).isChecked();
 
+        setOnBootSettings = getSharedPreferences(SOB_PREFS_NAME, 0);
+        SharedPreferences.Editor editor = setOnBootSettings.edit();
+
         if (state)
         {
             check.setGesture("right", state);
+            editor.putBoolean("right", true);
+            editor.apply();
         }
         else
         {
             check.setGesture("right", state);
+            editor.putBoolean("right", false);
+            editor.apply();
         }
     }
 
@@ -205,13 +310,20 @@ public class MainActivity extends ActionBarActivity {
     {
         boolean state = ((Switch) view).isChecked();
 
+        setOnBootSettings = getSharedPreferences(SOB_PREFS_NAME, 0);
+        SharedPreferences.Editor editor = setOnBootSettings.edit();
+
         if (state)
         {
             check.setGesture("left", state);
+            editor.putBoolean("left", true);
+            editor.apply();
         }
         else
         {
             check.setGesture("left", state);
+            editor.putBoolean("left", false);
+            editor.apply();
         }
     }
 
@@ -219,13 +331,20 @@ public class MainActivity extends ActionBarActivity {
     {
         boolean state = ((Switch) view).isChecked();
 
+        setOnBootSettings = getSharedPreferences(SOB_PREFS_NAME, 0);
+        SharedPreferences.Editor editor = setOnBootSettings.edit();
+
         if (state)
         {
             check.setGesture("e", state);
+            editor.putBoolean("e", true);
+            editor.apply();
         }
         else
         {
             check.setGesture("e", state);
+            editor.putBoolean("e", false);
+            editor.apply();
         }
     }
 
@@ -233,13 +352,20 @@ public class MainActivity extends ActionBarActivity {
     {
         boolean state = ((Switch) view).isChecked();
 
+        setOnBootSettings = getSharedPreferences(SOB_PREFS_NAME, 0);
+        SharedPreferences.Editor editor = setOnBootSettings.edit();
+
         if (state)
         {
             check.setGesture("o", state);
+            editor.putBoolean("o", true);
+            editor.apply();
         }
         else
         {
             check.setGesture("o", state);
+            editor.putBoolean("o", false);
+            editor.apply();
         }
     }
 
@@ -247,13 +373,20 @@ public class MainActivity extends ActionBarActivity {
     {
         boolean state = ((Switch) view).isChecked();
 
+        setOnBootSettings = getSharedPreferences(SOB_PREFS_NAME, 0);
+        SharedPreferences.Editor editor = setOnBootSettings.edit();
+
         if (state)
         {
             check.setGesture("w", state);
+            editor.putBoolean("w", true);
+            editor.apply();
         }
         else
         {
             check.setGesture("w", state);
+            editor.putBoolean("w", false);
+            editor.apply();
         }
     }
 
@@ -261,13 +394,20 @@ public class MainActivity extends ActionBarActivity {
     {
         boolean state = ((Switch) view).isChecked();
 
+        setOnBootSettings = getSharedPreferences(SOB_PREFS_NAME, 0);
+        SharedPreferences.Editor editor = setOnBootSettings.edit();
+
         if (state)
         {
             check.setGesture("m", state);
+            editor.putBoolean("m", true);
+            editor.apply();
         }
         else
         {
             check.setGesture("m", state);
+            editor.putBoolean("m", false);
+            editor.apply();
         }
     }
 
@@ -275,15 +415,23 @@ public class MainActivity extends ActionBarActivity {
     {
         boolean state = ((Switch) view).isChecked();
 
+        setOnBootSettings = getSharedPreferences(SOB_PREFS_NAME, 0);
+        SharedPreferences.Editor editor = setOnBootSettings.edit();
+
         if (state)
         {
             check.setGesture("c", state);
+            editor.putBoolean("c", true);
+            editor.apply();
         }
         else
         {
             check.setGesture("c", state);
+            editor.putBoolean("c", false);
+            editor.apply();
         }
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
