@@ -40,7 +40,7 @@ public class AboutActivity extends ActionBarActivity {
             public void onClick(View v) {
                 Intent viewIntent =
                         new Intent("android.intent.action.VIEW",
-                                Uri.parse("http://github.com/vishal-android-freak/Fusion_control"));
+                                Uri.parse("http://github.com/vishal-android-freak/Fusion_Control"));
                 startActivity(viewIntent);
             }
         });
