@@ -16,10 +16,14 @@
 
 package vishal.vaf.fusioncontrol;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageButton;
 
 
 public class AboutActivity extends ActionBarActivity {
@@ -28,5 +32,17 @@ public class AboutActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
+
+        ImageButton ib = (ImageButton) findViewById(R.id.imageButton);
+
+        ib.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent viewIntent =
+                        new Intent("android.intent.action.VIEW",
+                                Uri.parse("http://github.com/vishal-android-freak/Fusion_control"));
+                startActivity(viewIntent);
+            }
+        });
     }
 }
