@@ -16,5 +16,9 @@ Supports Different Gestures, apart from the default Double Tap to Wake. Supporte
 9.)  Draw 'M'  
 10.) Draw 'C'  
 
+Fusion Control is Open Source and licensed under the Apache License, Version 2.0 and uses following libraries 
+
+1.) v7 AppCompat Library   
+2.) v7 Cardview Library
 
 #This App is only supported on YU Yureka and requires root access.
