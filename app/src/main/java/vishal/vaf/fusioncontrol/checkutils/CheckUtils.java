@@ -70,41 +70,48 @@ public class CheckUtils {
         return false;
     }
 
-    public void setGesture(String gestureNameUsed, boolean status)
+    public void setGesture(final String gestureNameUsed, final boolean status)
     {
-        Log.d(tag, "Let's set the gestures, yeah?");
+        new Thread()
+        {
+            @Override
+            public void run()
+            {
+                Log.d(tag, "Let's set the gestures, yeah?");
 
 
-        Process p;
-        DataOutputStream os;
-        InputStream is;
-        String res = "";
-        //the format command
-        String[] command = new String[]{ "echo " + gestureNameUsed + "=" + status + " >> /sys/devices/virtual/touchscreen/touchscreen_dev/gesture_ctrl"};
+                Process p;
+                DataOutputStream os;
+                InputStream is;
+                String res = "";
+                //the format command
+                String[] command = new String[]{ "echo " + gestureNameUsed + "=" + status + " >> /sys/devices/virtual/touchscreen/touchscreen_dev/gesture_ctrl"};
 
-        //Calling su, because nothing happens, if you aren't, the SuperUser. Hahahaha!
-        try {
-            //create a new root shell
-            p = Runtime.getRuntime().exec("su");
-            os = new DataOutputStream(p.getOutputStream());
-            is = p.getErrorStream();
-            //add the commands to the process
-            for (String cmd : command) {
-                Log.d(tag, cmd);
-                os.writeBytes(cmd + "\n");
+                //Calling su, because nothing happens, if you aren't, the SuperUser. Hahahaha!
+                try {
+                    //create a new root shell
+                    p = Runtime.getRuntime().exec("su");
+                    os = new DataOutputStream(p.getOutputStream());
+                    is = p.getErrorStream();
+                    //add the commands to the process
+                    for (String cmd : command) {
+                        Log.d(tag, cmd);
+                        os.writeBytes(cmd + "\n");
+                    }
+                    //flush out the process
+                    os.writeBytes("exit\n");
+                    byte[] buff = new byte[512];
+                    is.read(buff);
+                    res += new String(buff);
+                    os.flush();
+                    p.waitFor();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
-            //flush out the process
-            os.writeBytes("exit\n");
-            byte[] buff = new byte[512];
-            is.read(buff);
-            res += new String(buff);
-            os.flush();
-            p.waitFor();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        }.start();
     }
 
     public String getResponse()
