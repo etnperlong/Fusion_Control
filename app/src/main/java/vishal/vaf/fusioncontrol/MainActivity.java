@@ -17,26 +17,43 @@
 package vishal.vaf.fusioncontrol;
 
 import android.app.AlertDialog;
+import android.app.KeyguardManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.os.PowerManager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
+import android.app.FragmentManager;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.ActionBar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Switch;
 
 import vishal.vaf.fusioncontrol.checkutils.CheckUtils;
+import vishal.vaf.fusioncontrol.checkutils.ManageWakeLock;
+import vishal.vaf.fusioncontrol.fragment.SwitchFragment;
 
 
 public class MainActivity extends ActionBarActivity {
 
     CheckUtils check = new CheckUtils();
-
+    SwitchFragment switchFragment;
+    FragmentManager fragmentManager;
     SharedPreferences setOnBootSettings;
+    ActionBarDrawerToggle actionBarDrawerToggle;
+    ActionBar actionBar;
 
+    private String[] navDrawList;
+    private DrawerLayout mDrawerLayout;
+    private ListView mDrawerList;
     public static final String SOB_PREFS_NAME = "SetOnBoot";
 
     private static String CONTROL_PATH = "/sys/devices/virtual/touchscreen/touchscreen_dev/gesture_ctrl";
@@ -53,10 +70,21 @@ public class MainActivity extends ActionBarActivity {
     public static int TW_SUPPORT_M_SLIDE_WAKEUP = 0x100;
     public static int TW_SUPPORT_DOUBLE_CLICK_WAKEUP = 0x200;
 
+
+    private KeyguardManager mKeyguardManager = null;
+    private PowerManager mPowerManager;
+    private boolean mWakeAndUnlock = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        populateCardView();
+
+        setActionBarOptions();
+
+        populateNavDrawList();
 
         Switch sw1 = (Switch) findViewById(R.id.switch1);
         Switch sw2 = (Switch) findViewById(R.id.switch2);
@@ -112,6 +140,7 @@ public class MainActivity extends ActionBarActivity {
         {
             e.printStackTrace();
         }
+
 
         final boolean hasDoubleTapEnabled = (response & TW_SUPPORT_DOUBLE_CLICK_WAKEUP) != 0;
         final boolean hasSwipeUpEnabled = (response & TW_SUPPORT_UP_SLIDE_WAKEUP) != 0;
@@ -237,6 +266,76 @@ public class MainActivity extends ActionBarActivity {
             editor.putBoolean("c", false);
             editor.apply();
         }
+
+        //unlockScreen();
+    }
+
+    public void populateCardView()
+    {
+        fragmentManager = getFragmentManager();
+        switchFragment = new SwitchFragment();
+        fragmentManager.beginTransaction()
+                .add(R.id.switch_card_view, switchFragment)
+                .commit();
+    }
+
+    public void populateNavDrawList()
+    {
+        navDrawList = getResources().getStringArray(R.array.nav_draw_list);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerList = (ListView) findViewById(R.id.left_drawer);
+        mDrawerList.setAdapter(new ArrayAdapter<String>(this,
+                R.layout.drawer_list, navDrawList));
+
+        actionBarDrawerToggle = new ActionBarDrawerToggle(
+                this,
+                mDrawerLayout,
+                null,
+                R.string.app_name,
+                R.string.app_name) {
+
+            /** Called when a drawer has settled in a completely closed state. */
+            public void onDrawerClosed(View view) {
+                super.onDrawerClosed(view);
+            }
+
+            /** Called when a drawer has settled in a completely open state. */
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+            }
+        };
+        mDrawerLayout.setDrawerListener(actionBarDrawerToggle);
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        // Sync the toggle state after onRestoreInstanceState has occurred.
+        actionBarDrawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        actionBarDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Pass the event to ActionBarDrawerToggle, if it returns
+        // true, then it has handled the app icon touch event
+        if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        // Handle your other action bar items...
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void setActionBarOptions() {
+        actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setHomeButtonEnabled(true);
     }
 
     public void onClickDouble(View view)
@@ -448,8 +547,23 @@ public class MainActivity extends ActionBarActivity {
         }
     }
 
+    private void unlockScreen() {
+        // See if the lock screen should be disabled
+        if (!mWakeAndUnlock) {
+            return;
+        }
 
-    @Override
+        // See if the screen is locked or if no lock set and the screen is off
+        // and get the wake lock to turn on the screen.
+        boolean isScreenOn = mPowerManager.isScreenOn();
+        boolean inKeyguardRestrictedInputMode = mKeyguardManager.inKeyguardRestrictedInputMode();
+        if (inKeyguardRestrictedInputMode || ((!inKeyguardRestrictedInputMode) && !isScreenOn)) {
+            ManageWakeLock.acquireFull(this);
+        }
+    }
+
+
+    /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -469,5 +583,5 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 }
