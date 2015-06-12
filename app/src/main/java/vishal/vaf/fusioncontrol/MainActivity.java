@@ -18,6 +18,7 @@ package vishal.vaf.fusioncontrol;
 
 import android.app.AlertDialog;
 import android.app.KeyguardManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -33,12 +34,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Switch;
 
 import vishal.vaf.fusioncontrol.checkutils.CheckUtils;
-import vishal.vaf.fusioncontrol.checkutils.ManageWakeLock;
 import vishal.vaf.fusioncontrol.fragment.SwitchFragment;
 
 
@@ -57,23 +58,6 @@ public class MainActivity extends ActionBarActivity {
     public static final String SOB_PREFS_NAME = "SetOnBoot";
 
     private static String CONTROL_PATH = "/sys/devices/virtual/touchscreen/touchscreen_dev/gesture_ctrl";
-
-    public static int TW_SUPPORT_NONE_SLIDE_WAKEUP = 0x0;
-    public static int TW_SUPPORT_UP_SLIDE_WAKEUP = 0x1;
-    public static int TW_SUPPORT_DOWN_SLIDE_WAKEUP = 0x2;
-    public static int TW_SUPPORT_LEFT_SLIDE_WAKEUP = 0x4;
-    public static int TW_SUPPORT_RIGHT_SLIDE_WAKEUP = 0x8;
-    public static int TW_SUPPORT_E_SLIDE_WAKEUP = 0x10;
-    public static int TW_SUPPORT_O_SLIDE_WAKEUP = 0x20;
-    public static int TW_SUPPORT_W_SLIDE_WAKEUP = 0x40;
-    public static int TW_SUPPORT_C_SLIDE_WAKEUP = 0x80;
-    public static int TW_SUPPORT_M_SLIDE_WAKEUP = 0x100;
-    public static int TW_SUPPORT_DOUBLE_CLICK_WAKEUP = 0x200;
-
-
-    private KeyguardManager mKeyguardManager = null;
-    private PowerManager mPowerManager;
-    private boolean mWakeAndUnlock = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,142 +116,10 @@ public class MainActivity extends ActionBarActivity {
                 );
                 noRootAlert.show();
             }
-        long response=0;
-        try {
-            response = Long.decode(check.getResponse());
-        }
-        catch (NumberFormatException e)
-        {
-            e.printStackTrace();
-        }
 
-
-        final boolean hasDoubleTapEnabled = (response & TW_SUPPORT_DOUBLE_CLICK_WAKEUP) != 0;
-        final boolean hasSwipeUpEnabled = (response & TW_SUPPORT_UP_SLIDE_WAKEUP) != 0;
-        final boolean hasSwipeDownEnabled = (response & TW_SUPPORT_DOWN_SLIDE_WAKEUP) != 0;
-        final boolean hasSwipeLeftEnabled = (response & TW_SUPPORT_LEFT_SLIDE_WAKEUP) != 0;
-        final boolean hasSwipeRightEnabled = (response & TW_SUPPORT_RIGHT_SLIDE_WAKEUP) != 0;
-        final boolean hasDraw_eEnabled = (response & TW_SUPPORT_E_SLIDE_WAKEUP) != 0;
-        final boolean hasDraw_oEnabled = (response & TW_SUPPORT_O_SLIDE_WAKEUP) != 0;
-        final boolean hasDraw_wEnabled = (response & TW_SUPPORT_W_SLIDE_WAKEUP) != 0;
-        final boolean hasDraw_mEnabled = (response & TW_SUPPORT_M_SLIDE_WAKEUP) != 0;
-        final boolean hasDraw_cEnabled = (response & TW_SUPPORT_C_SLIDE_WAKEUP) != 0;
-
-        setOnBootSettings = getSharedPreferences(SOB_PREFS_NAME, 0);
+        setOnBootSettings = getSharedPreferences(SOB_PREFS_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = setOnBootSettings.edit();
 
-        if(hasDoubleTapEnabled)
-        {
-            sw1.setChecked(true);
-            editor.putBoolean("double_click", true);
-            editor.apply();
-
-        }
-        else {
-            editor.putBoolean("double_click", false);
-            editor.apply();
-        }
-
-        if(hasSwipeUpEnabled)
-        {
-            sw2.setChecked(true);
-            editor.putBoolean("up", true);
-            editor.apply();
-        }
-        else {
-            editor.putBoolean("up", false);
-            editor.apply();
-        }
-
-        if(hasSwipeDownEnabled)
-        {
-            sw3.setChecked(true);
-            editor.putBoolean("down", true);
-            editor.apply();
-        }
-        else {
-            editor.putBoolean("down", false);
-            editor.apply();
-        }
-
-        if(hasSwipeRightEnabled)
-        {
-            sw4.setChecked(true);
-            editor.putBoolean("right", true);
-            editor.apply();
-        }
-        else {
-            editor.putBoolean("right", false);
-            editor.apply();
-        }
-
-        if(hasSwipeLeftEnabled)
-        {
-            sw5.setChecked(true);
-            editor.putBoolean("left", true);
-            editor.apply();
-        }
-        else {
-            editor.putBoolean("left", false);
-            editor.apply();
-        }
-
-        if(hasDraw_eEnabled)
-        {
-            sw6.setChecked(true);
-            editor.putBoolean("e", true);
-            editor.apply();
-        }
-        else {
-            editor.putBoolean("e", false);
-            editor.apply();
-        }
-
-        if(hasDraw_oEnabled)
-        {
-            sw7.setChecked(true);
-            editor.putBoolean("o", true);
-            editor.apply();
-        }
-        else {
-            editor.putBoolean("o", false);
-            editor.apply();
-        }
-
-        if(hasDraw_wEnabled)
-        {
-            sw8.setChecked(true);
-            editor.putBoolean("w", true);
-            editor.apply();
-        }
-        else {
-            editor.putBoolean("w", false);
-            editor.apply();
-        }
-
-        if(hasDraw_mEnabled)
-        {
-            sw9.setChecked(true);
-            editor.putBoolean("m", true);
-            editor.apply();
-        }
-        else {
-            editor.putBoolean("m", false);
-            editor.apply();
-        }
-
-        if(hasDraw_cEnabled)
-        {
-            sw10.setChecked(true);
-            editor.putBoolean("c", true);
-            editor.apply();
-        }
-        else {
-            editor.putBoolean("c", false);
-            editor.apply();
-        }
-
-        //unlockScreen();
     }
 
     public void populateCardView()
@@ -283,9 +135,6 @@ public class MainActivity extends ActionBarActivity {
     {
         navDrawList = getResources().getStringArray(R.array.nav_draw_list);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerList = (ListView) findViewById(R.id.left_drawer);
-        mDrawerList.setAdapter(new ArrayAdapter<String>(this,
-                R.layout.drawer_list, navDrawList));
 
         actionBarDrawerToggle = new ActionBarDrawerToggle(
                 this,
@@ -305,9 +154,24 @@ public class MainActivity extends ActionBarActivity {
             }
         };
         mDrawerLayout.setDrawerListener(actionBarDrawerToggle);
+        mDrawerList = (ListView) findViewById(R.id.left_drawer);
+        mDrawerList.setAdapter(new ArrayAdapter<String>(this,
+                R.layout.drawer_list, navDrawList));
+
+        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
     }
 
-    @Override
+    private class DrawerItemClickListener implements ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView parent, View view, int position, long id) {
+            selectItem(position);
+        }
+    }
+
+    private void selectItem(int position) {
+        startActivity(new Intent(this, AboutActivity.class));
+    }
+        @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         // Sync the toggle state after onRestoreInstanceState has occurred.
@@ -526,39 +390,20 @@ public class MainActivity extends ActionBarActivity {
         }
     }
 
-    public void onClickDraw_C(View view)
-    {
+    public void onClickDraw_C(View view) {
         boolean state = ((Switch) view).isChecked();
 
         setOnBootSettings = getSharedPreferences(SOB_PREFS_NAME, 0);
         SharedPreferences.Editor editor = setOnBootSettings.edit();
 
-        if (state)
-        {
+        if (state) {
             check.setGesture("c", state);
             editor.putBoolean("c", true);
             editor.apply();
-        }
-        else
-        {
+        } else {
             check.setGesture("c", state);
             editor.putBoolean("c", false);
             editor.apply();
-        }
-    }
-
-    private void unlockScreen() {
-        // See if the lock screen should be disabled
-        if (!mWakeAndUnlock) {
-            return;
-        }
-
-        // See if the screen is locked or if no lock set and the screen is off
-        // and get the wake lock to turn on the screen.
-        boolean isScreenOn = mPowerManager.isScreenOn();
-        boolean inKeyguardRestrictedInputMode = mKeyguardManager.inKeyguardRestrictedInputMode();
-        if (inKeyguardRestrictedInputMode || ((!inKeyguardRestrictedInputMode) && !isScreenOn)) {
-            ManageWakeLock.acquireFull(this);
         }
     }
 

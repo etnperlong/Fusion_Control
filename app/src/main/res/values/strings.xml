@@ -17,4 +17,7 @@
     <string-array name="nav_draw_list">
         <item>About</item>
     </string-array>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
 </resources>

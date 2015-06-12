@@ -114,7 +114,7 @@ public class CheckUtils {
         }.start();
     }
 
-    public String getResponse()
+    /*public String getResponse()
     {
         Log.d(tag, "Copy gesture_ctrl to sdcard. We don't want to mess up being in root");
 
@@ -168,5 +168,5 @@ public class CheckUtils {
         }
 
         return text.toString();
-    }
+    }*/
 }
