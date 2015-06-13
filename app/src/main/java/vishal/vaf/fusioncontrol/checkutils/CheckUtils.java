@@ -17,17 +17,14 @@
 package vishal.vaf.fusioncontrol.checkutils;
 
 import android.os.Build;
-import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.DataOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.FileReader;
 
 /**
  * Created by vishal on 13/3/15.
@@ -35,9 +32,6 @@ import java.io.FileReader;
 public class CheckUtils {
 
     private String tag = "Fusion";
-
-    private BufferedWriter bufferedWriter;
-    private BufferedReader bufferedReader;
 
     public Boolean hasRoot() {
         Process root;
