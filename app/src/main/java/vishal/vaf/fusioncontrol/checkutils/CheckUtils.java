@@ -18,6 +18,7 @@ package vishal.vaf.fusioncontrol.checkutils;
 
 import android.os.Build;
 import android.os.Environment;
+import android.os.Handler;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -114,59 +115,42 @@ public class CheckUtils {
         }.start();
     }
 
-    /*public String getResponse()
+    public void reboot()
     {
-        Log.d(tag, "Copy gesture_ctrl to sdcard. We don't want to mess up being in root");
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                Process p;
+                DataOutputStream os;
+                InputStream is;
+                String res = "";
+                //the format command
+                String[] command = new String[]{"reboot"};
 
-
-        Process p;
-        DataOutputStream os;
-        InputStream is;
-
-        String res = "";
-        //the format command
-        String[] command = new String[]{ "cp /sys/devices/virtual/touchscreen/touchscreen_dev/gesture_ctrl /sdcard/gesture.txt"};
-
-        //Calling su, because nothing happens, if you aren't, the SuperUser. Hahahaha!
-        try {
-            //create a new root shell
-            p = Runtime.getRuntime().exec("su");
-            os = new DataOutputStream(p.getOutputStream());
-            is = p.getErrorStream();
-            //add the commands to the process
-            for (String cmd : command) {
-                Log.d(tag, cmd);
-                os.writeBytes(cmd + "\n");
+                //Calling su, because nothing happens, if you aren't, the SuperUser. Hahahaha!
+                try {
+                    //create a new root shell
+                    p = Runtime.getRuntime().exec("su");
+                    os = new DataOutputStream(p.getOutputStream());
+                    is = p.getErrorStream();
+                    //add the commands to the process
+                    for (String cmd : command) {
+                        Log.d(tag, cmd);
+                        os.writeBytes(cmd + "\n");
+                    }
+                    //flush out the process
+                    os.writeBytes("exit\n");
+                    byte[] buff = new byte[512];
+                    is.read(buff);
+                    res += new String(buff);
+                    os.flush();
+                    p.waitFor();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
-            //flush out the process
-            os.writeBytes("exit\n");
-            byte[] buff = new byte[512];
-            is.read(buff);
-            res += new String(buff);
-            os.flush();
-            p.waitFor();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        File f = new File ("/sdcard/gesture.txt");
-
-        StringBuilder text = new StringBuilder();
-        String line= "";
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(f));
-
-            while ((line = br.readLine()) != null) {
-                text.append(line);
-            }
-            br.close();
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return text.toString();
-    }*/
+        },5000);
+    }
 }

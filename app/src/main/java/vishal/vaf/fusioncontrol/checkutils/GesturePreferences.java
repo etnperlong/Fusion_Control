@@ -78,4 +78,9 @@ public class GesturePreferences extends ActionBarActivity{
         setOnBootSettings = context.getSharedPreferences(SOB_PREFS_NAME, 0);
         return setOnBootSettings.getBoolean("c", false);
     }
+
+    public boolean isUnlockChecked(Context context) {
+        setOnBootSettings = context.getSharedPreferences(SOB_PREFS_NAME, 0);
+        return setOnBootSettings.getBoolean("checked", false);
+    }
 }

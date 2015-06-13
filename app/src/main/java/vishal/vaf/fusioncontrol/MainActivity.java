@@ -18,20 +18,18 @@ package vishal.vaf.fusioncontrol;
 
 import android.app.AlertDialog;
 import android.app.KeyguardManager;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.os.PowerManager;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.ActionBar;
-import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -40,6 +38,7 @@ import android.widget.ListView;
 import android.widget.Switch;
 
 import vishal.vaf.fusioncontrol.checkutils.CheckUtils;
+import vishal.vaf.fusioncontrol.fragment.AboutFragment;
 import vishal.vaf.fusioncontrol.fragment.SwitchFragment;
 
 
@@ -47,14 +46,19 @@ public class MainActivity extends ActionBarActivity {
 
     CheckUtils check = new CheckUtils();
     SwitchFragment switchFragment;
+    AboutFragment aboutFragment;
     FragmentManager fragmentManager;
+    KeyguardManager manager;
+    KeyguardManager.KeyguardLock lock;
     SharedPreferences setOnBootSettings;
     ActionBarDrawerToggle actionBarDrawerToggle;
     ActionBar actionBar;
+    ProgressDialog progress;
 
     private String[] navDrawList;
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
+    private CharSequence mTitle;
     public static final String SOB_PREFS_NAME = "SetOnBoot";
 
     private static String CONTROL_PATH = "/sys/devices/virtual/touchscreen/touchscreen_dev/gesture_ctrl";
@@ -69,17 +73,6 @@ public class MainActivity extends ActionBarActivity {
         setActionBarOptions();
 
         populateNavDrawList();
-
-        Switch sw1 = (Switch) findViewById(R.id.switch1);
-        Switch sw2 = (Switch) findViewById(R.id.switch2);
-        Switch sw3 = (Switch) findViewById(R.id.switch3);
-        Switch sw4 = (Switch) findViewById(R.id.switch4);
-        Switch sw5 = (Switch) findViewById(R.id.switch5);
-        Switch sw6 = (Switch) findViewById(R.id.switch6);
-        Switch sw7 = (Switch) findViewById(R.id.switch7);
-        Switch sw8 = (Switch) findViewById(R.id.switch8);
-        Switch sw9 = (Switch) findViewById(R.id.switch9);
-        Switch sw10 = (Switch) findViewById(R.id.switch10);
 
         if(!check.isDeviceSupported())
         {
@@ -116,10 +109,6 @@ public class MainActivity extends ActionBarActivity {
                 );
                 noRootAlert.show();
             }
-
-        setOnBootSettings = getSharedPreferences(SOB_PREFS_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = setOnBootSettings.edit();
-
     }
 
     public void populateCardView()
@@ -146,11 +135,13 @@ public class MainActivity extends ActionBarActivity {
             /** Called when a drawer has settled in a completely closed state. */
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
+                getSupportActionBar().setTitle(mTitle);
             }
 
             /** Called when a drawer has settled in a completely open state. */
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
+                getSupportActionBar().setTitle("Fusion Control");
             }
         };
         mDrawerLayout.setDrawerListener(actionBarDrawerToggle);
@@ -169,11 +160,41 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void selectItem(int position) {
-        startActivity(new Intent(this, AboutActivity.class));
+        switch (position)
+        {
+            case 0:
+            {
+                fragmentManager = getFragmentManager();
+                switchFragment = new SwitchFragment();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.switch_card_view, switchFragment)
+                        .commit();
+                mDrawerList.setItemChecked(position, true);
+                setTitle("Fusion Control");
+                mTitle = "Fusion Control";
+                mDrawerLayout.closeDrawer(mDrawerList);
+            }
+            break;
+            case 1:
+            {
+                fragmentManager = getFragmentManager();
+                aboutFragment = new AboutFragment();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.switch_card_view, aboutFragment)
+                        .commit();
+                mDrawerList.setItemChecked(position, true);
+                setTitle(navDrawList[position]);
+                mTitle = navDrawList[position];
+                mDrawerLayout.closeDrawer(mDrawerList);
+            }
+            break;
+        }
+
     }
+
         @Override
     protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
+            super.onPostCreate(savedInstanceState);
         // Sync the toggle state after onRestoreInstanceState has occurred.
         actionBarDrawerToggle.syncState();
     }
@@ -200,6 +221,12 @@ public class MainActivity extends ActionBarActivity {
         actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeButtonEnabled(true);
+    }
+
+    public void unlockScreen() {
+        manager = (KeyguardManager) this.getSystemService(Context.KEYGUARD_SERVICE);
+        lock = manager.newKeyguardLock("One");
+        lock.disableKeyguard();
     }
 
     public void onClickDouble(View view)
@@ -404,6 +431,77 @@ public class MainActivity extends ActionBarActivity {
             check.setGesture("c", state);
             editor.putBoolean("c", false);
             editor.apply();
+        }
+    }
+
+    public void onChecked(final View view)
+    {
+        boolean state = ((Switch) view).isChecked();
+        setOnBootSettings = getSharedPreferences(SOB_PREFS_NAME, Context.MODE_PRIVATE);
+        final SharedPreferences.Editor editor = setOnBootSettings.edit();
+
+        if (state)
+        {
+            AlertDialog.Builder support = new AlertDialog.Builder(this);
+            support.setTitle("Warning !! ");
+            support.setMessage("Switching on Direct Unlock disables pattern or password lock as well.");
+            support.setCancelable(false);
+            support.setNegativeButton(
+                    "Exit",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            editor.putBoolean("checked", false);
+                            editor.apply();
+                            ((Switch) view).setChecked(false);
+                        }
+                    }
+            );
+            support.setPositiveButton(
+                    "Go Ahead",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            unlockScreen();
+                            editor.putBoolean("checked", true);
+                            editor.apply();
+                        }
+                    }
+            );
+            support.create();
+            support.show();
+        }
+        else
+        {
+            AlertDialog.Builder support = new AlertDialog.Builder(this);
+            support.setTitle("Reboot Required !! ");
+            support.setMessage("Your device needs to be rebooted to re-enable lockscreen");
+            support.setCancelable(false);
+            support.setNegativeButton(
+                    "Reboot later",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            editor.putBoolean("checked", false);
+                            editor.apply();
+                        }
+                    }
+            );
+            support.setPositiveButton(
+                    "Reboot now",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            progress = ProgressDialog.show(MainActivity.this, "",
+                                    "Rebooting",false);
+                            editor.putBoolean("checked", false);
+                            editor.apply();
+                            check.reboot();
+                        }
+                    }
+            );
+            support.create();
+            support.show();
         }
     }
 

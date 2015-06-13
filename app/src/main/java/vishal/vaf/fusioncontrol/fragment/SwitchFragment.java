@@ -1,10 +1,15 @@
 package vishal.vaf.fusioncontrol.fragment;
 
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.v4.app.DialogFragment;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,12 +47,11 @@ public class SwitchFragment extends Fragment {
         Switch sw8 = (Switch) rootview.findViewById(R.id.switch8);
         Switch sw9 = (Switch) rootview.findViewById(R.id.switch9);
         Switch sw10 = (Switch) rootview.findViewById(R.id.switch10);
+        Switch sw11 = (Switch) rootview.findViewById(R.id.switch11);
 
         setOnBootSettings = getActivity().getSharedPreferences(SOB_PREFS_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = setOnBootSettings.edit();
 
-        if (setOnBootSettings!=null)
-        {
+        if (setOnBootSettings != null) {
             sw1.setChecked(setOnBootSettings.getBoolean("double_click", false));
             sw2.setChecked(setOnBootSettings.getBoolean("up", false));
             sw3.setChecked(setOnBootSettings.getBoolean("down", false));
@@ -58,10 +62,10 @@ public class SwitchFragment extends Fragment {
             sw8.setChecked(setOnBootSettings.getBoolean("w", false));
             sw9.setChecked(setOnBootSettings.getBoolean("m", false));
             sw10.setChecked(setOnBootSettings.getBoolean("c", false));
+            sw11.setChecked(setOnBootSettings.getBoolean("checked", false));
         }
 
         return rootview;
     }
-
 
 }

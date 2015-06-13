@@ -16,13 +16,16 @@
 
 package vishal.vaf.fusioncontrol;
 
+import android.app.KeyguardManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.widget.Switch;
 
 import vishal.vaf.fusioncontrol.checkutils.CheckUtils;
 import vishal.vaf.fusioncontrol.checkutils.GesturePreferences;
+import vishal.vaf.fusioncontrol.MainActivity;
 
 /**
  * Created by vishal on 15/3/15.
@@ -32,6 +35,7 @@ public class BootReceiver extends BroadcastReceiver {
     private String tag = "Fusion";
 
     GesturePreferences main = new GesturePreferences();
+    MainActivity mainActivity = new MainActivity();
     CheckUtils cu = new CheckUtils();
 
     @Override
@@ -83,6 +87,11 @@ public class BootReceiver extends BroadcastReceiver {
             if(main.isDraw_cEnabled(context))
             {
                 cu.setGesture("c", true);
+            }
+            if(main.isUnlockChecked(context))
+            {
+                Intent i = new Intent(context, DisableKeyguard.class);
+                context.startService(i);
             }
         }
     }
