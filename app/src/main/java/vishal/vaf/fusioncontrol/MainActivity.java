@@ -17,11 +17,14 @@
 package vishal.vaf.fusioncontrol;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.KeyguardManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.widget.DrawerLayout;
@@ -30,6 +33,7 @@ import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.ActionBar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -37,9 +41,14 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Switch;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import vishal.vaf.fusioncontrol.adapters.PackageListAdapter;
 import vishal.vaf.fusioncontrol.checkutils.CheckUtils;
 import vishal.vaf.fusioncontrol.fragment.AboutFragment;
 import vishal.vaf.fusioncontrol.fragment.SwitchFragment;
+import vishal.vaf.fusioncontrol.services.ScreenCheckService;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -60,7 +69,12 @@ public class MainActivity extends ActionBarActivity {
     private ListView mDrawerList;
     private CharSequence mTitle;
     public static final String SOB_PREFS_NAME = "SetOnBoot";
+    private PackageManager mPackageManager;
+    private PackageListAdapter mPackageAdapter;
+    private String mPackageList;
+    private Map<String, Package> mPackages;
 
+    private static final int DIALOG_APPS = 0;
     private static String CONTROL_PATH = "/sys/devices/virtual/touchscreen/touchscreen_dev/gesture_ctrl";
 
     @Override
@@ -73,6 +87,8 @@ public class MainActivity extends ActionBarActivity {
         setActionBarOptions();
 
         populateNavDrawList();
+
+        startService(this);
 
         if(!check.isDeviceSupported())
         {
@@ -109,6 +125,11 @@ public class MainActivity extends ActionBarActivity {
                 );
                 noRootAlert.show();
             }
+
+        mPackageManager = getPackageManager();
+        mPackageAdapter = new PackageListAdapter(this);
+
+        mPackages = new HashMap<String, Package>();
     }
 
     public void populateCardView()
@@ -118,6 +139,13 @@ public class MainActivity extends ActionBarActivity {
         fragmentManager.beginTransaction()
                 .add(R.id.switch_card_view, switchFragment)
                 .commit();
+    }
+
+    public void startService(Context context)
+    {
+        Log.d("Fusion", "Started service");
+        Intent i = new Intent(context, ScreenCheckService.class);
+        context.startService(i);
     }
 
     public void populateNavDrawList()
@@ -240,6 +268,24 @@ public class MainActivity extends ActionBarActivity {
             check.setGesture("double_click", state);
             editor.putBoolean("double_click", true);
             editor.apply();
+
+            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    final ListView list = new ListView(this);
+                    list.setAdapter(mPackageAdapter);
+
+                    builder.setTitle("Choose apps");
+                    builder.setView(list);
+                    list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            // Add empty application definition, the user will be able to edit it later
+                            PackageListAdapter.PackageItem info = (PackageListAdapter.PackageItem) parent.getItemAtPosition(position);
+                            //addCustomApplicationPref(info.packageName);
+                            Log.d("Fusion", info.packageName);
+                        }
+                    });
+
+                    builder.show();
         }
         else
         {
