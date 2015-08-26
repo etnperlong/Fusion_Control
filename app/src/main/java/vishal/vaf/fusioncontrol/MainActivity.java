@@ -33,6 +33,7 @@ import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -69,18 +70,14 @@ public class MainActivity extends ActionBarActivity {
     private ListView mDrawerList;
     private CharSequence mTitle;
     public static final String SOB_PREFS_NAME = "SetOnBoot";
-    private PackageManager mPackageManager;
-    private PackageListAdapter mPackageAdapter;
-    private String mPackageList;
-    private Map<String, Package> mPackages;
-
-    private static final int DIALOG_APPS = 0;
-    private static String CONTROL_PATH = "/sys/devices/virtual/touchscreen/touchscreen_dev/gesture_ctrl";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         populateCardView();
 
@@ -90,7 +87,7 @@ public class MainActivity extends ActionBarActivity {
 
         startService(this);
 
-        if(!check.isDeviceSupported())
+        /*if(!check.isDeviceSupported())
         {
             AlertDialog.Builder support = new AlertDialog.Builder(this);
             support.setTitle("Unsupported Device !! ");
@@ -124,12 +121,7 @@ public class MainActivity extends ActionBarActivity {
                         }
                 );
                 noRootAlert.show();
-            }
-
-        mPackageManager = getPackageManager();
-        mPackageAdapter = new PackageListAdapter(this);
-
-        mPackages = new HashMap<String, Package>();
+            }*/
     }
 
     public void populateCardView()
@@ -139,6 +131,8 @@ public class MainActivity extends ActionBarActivity {
         fragmentManager.beginTransaction()
                 .add(R.id.switch_card_view, switchFragment)
                 .commit();
+        setTitle("Fusion Control");
+        mTitle = "Fusion Control";
     }
 
     public void startService(Context context)
@@ -255,229 +249,6 @@ public class MainActivity extends ActionBarActivity {
         manager = (KeyguardManager) this.getSystemService(Context.KEYGUARD_SERVICE);
         lock = manager.newKeyguardLock("One");
         lock.disableKeyguard();
-    }
-
-    public void onClickDouble(View view)
-    {
-        boolean state = ((Switch) view).isChecked();
-        setOnBootSettings = getSharedPreferences(SOB_PREFS_NAME, 0);
-        SharedPreferences.Editor editor = setOnBootSettings.edit();
-
-        if (state)
-        {
-            check.setGesture("double_click", state);
-            editor.putBoolean("double_click", true);
-            editor.apply();
-
-            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                    final ListView list = new ListView(this);
-                    list.setAdapter(mPackageAdapter);
-
-                    builder.setTitle("Choose apps");
-                    builder.setView(list);
-                    list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            // Add empty application definition, the user will be able to edit it later
-                            PackageListAdapter.PackageItem info = (PackageListAdapter.PackageItem) parent.getItemAtPosition(position);
-                            //addCustomApplicationPref(info.packageName);
-                            Log.d("Fusion", info.packageName);
-                        }
-                    });
-
-                    builder.show();
-        }
-        else
-        {
-            check.setGesture("double_click", state);
-            editor.putBoolean("double_click", false);
-            editor.apply();
-        }
-    }
-
-    public void onClickSwipeUp(View view)
-    {
-        boolean state = ((Switch) view).isChecked();
-
-        setOnBootSettings = getSharedPreferences(SOB_PREFS_NAME, 0);
-        SharedPreferences.Editor editor = setOnBootSettings.edit();
-
-        if (state)
-        {
-            check.setGesture("up", state);
-            editor.putBoolean("up", true);
-            editor.apply();
-        }
-        else
-        {
-            check.setGesture("up", state);
-            editor.putBoolean("up", false);
-            editor.apply();
-        }
-    }
-
-    public void onClickSwipeDown(View view)
-    {
-        boolean state = ((Switch) view).isChecked();
-
-        setOnBootSettings = getSharedPreferences(SOB_PREFS_NAME, 0);
-        SharedPreferences.Editor editor = setOnBootSettings.edit();
-
-        if (state)
-        {
-            check.setGesture("down", state);
-            editor.putBoolean("down", true);
-            editor.apply();
-        }
-        else
-        {
-            check.setGesture("down", state);
-            editor.putBoolean("down", false);
-            editor.apply();
-        }
-    }
-
-    public void onClickSwipeRight(View view)
-    {
-        boolean state = ((Switch) view).isChecked();
-
-        setOnBootSettings = getSharedPreferences(SOB_PREFS_NAME, 0);
-        SharedPreferences.Editor editor = setOnBootSettings.edit();
-
-        if (state)
-        {
-            check.setGesture("right", state);
-            editor.putBoolean("right", true);
-            editor.apply();
-        }
-        else
-        {
-            check.setGesture("right", state);
-            editor.putBoolean("right", false);
-            editor.apply();
-        }
-    }
-
-    public void onClickSwipeLeft(View view)
-    {
-        boolean state = ((Switch) view).isChecked();
-
-        setOnBootSettings = getSharedPreferences(SOB_PREFS_NAME, 0);
-        SharedPreferences.Editor editor = setOnBootSettings.edit();
-
-        if (state)
-        {
-            check.setGesture("left", state);
-            editor.putBoolean("left", true);
-            editor.apply();
-        }
-        else
-        {
-            check.setGesture("left", state);
-            editor.putBoolean("left", false);
-            editor.apply();
-        }
-    }
-
-    public void onClickDraw_E(View view)
-    {
-        boolean state = ((Switch) view).isChecked();
-
-        setOnBootSettings = getSharedPreferences(SOB_PREFS_NAME, 0);
-        SharedPreferences.Editor editor = setOnBootSettings.edit();
-
-        if (state)
-        {
-            check.setGesture("e", state);
-            editor.putBoolean("e", true);
-            editor.apply();
-        }
-        else
-        {
-            check.setGesture("e", state);
-            editor.putBoolean("e", false);
-            editor.apply();
-        }
-    }
-
-    public void onClickDraw_O(View view)
-    {
-        boolean state = ((Switch) view).isChecked();
-
-        setOnBootSettings = getSharedPreferences(SOB_PREFS_NAME, 0);
-        SharedPreferences.Editor editor = setOnBootSettings.edit();
-
-        if (state)
-        {
-            check.setGesture("o", state);
-            editor.putBoolean("o", true);
-            editor.apply();
-        }
-        else
-        {
-            check.setGesture("o", state);
-            editor.putBoolean("o", false);
-            editor.apply();
-        }
-    }
-
-    public void onClickDraw_W(View view)
-    {
-        boolean state = ((Switch) view).isChecked();
-
-        setOnBootSettings = getSharedPreferences(SOB_PREFS_NAME, 0);
-        SharedPreferences.Editor editor = setOnBootSettings.edit();
-
-        if (state)
-        {
-            check.setGesture("w", state);
-            editor.putBoolean("w", true);
-            editor.apply();
-        }
-        else
-        {
-            check.setGesture("w", state);
-            editor.putBoolean("w", false);
-            editor.apply();
-        }
-    }
-
-    public void onClickDraw_M(View view)
-    {
-        boolean state = ((Switch) view).isChecked();
-
-        setOnBootSettings = getSharedPreferences(SOB_PREFS_NAME, 0);
-        SharedPreferences.Editor editor = setOnBootSettings.edit();
-
-        if (state)
-        {
-            check.setGesture("m", state);
-            editor.putBoolean("m", true);
-            editor.apply();
-        }
-        else
-        {
-            check.setGesture("m", state);
-            editor.putBoolean("m", false);
-            editor.apply();
-        }
-    }
-
-    public void onClickDraw_C(View view) {
-        boolean state = ((Switch) view).isChecked();
-
-        setOnBootSettings = getSharedPreferences(SOB_PREFS_NAME, 0);
-        SharedPreferences.Editor editor = setOnBootSettings.edit();
-
-        if (state) {
-            check.setGesture("c", state);
-            editor.putBoolean("c", true);
-            editor.apply();
-        } else {
-            check.setGesture("c", state);
-            editor.putBoolean("c", false);
-            editor.apply();
-        }
     }
 
     public void onChecked(final View view)

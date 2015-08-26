@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="Gesture Wakeups">
+        <Preference
+            android:key="double_tap"
+            android:title="Double Tap"
+            android:persistent="true"/>
+
+        <Preference
+            android:key="swipe_up"
+            android:title="Swipe Up"
+            android:persistent="true"/>
+
+        <Preference
+            android:key="swipe_down"
+            android:title="Swipe Down"
+            android:persistent="true"/>
+
+        <Preference
+            android:key="swipe_right"
+            android:title="Swipe Right"
+            android:persistent="true"/>
+
+        <Preference
+            android:key="swipe_left"
+            android:title="Swipe Left"
+            android:persistent="true"/>
+
+        <Preference
+            android:key="draw_e"
+            android:title="Draw E"
+            android:persistent="true"/>
+
+        <Preference
+            android:key="draw_o"
+            android:title="Draw O"
+            android:persistent="true"/>
+
+        <Preference
+            android:key="draw_w"
+            android:title="Draw W"
+            android:persistent="true"/>
+
+        <Preference
+            android:key="draw_m"
+            android:title="Draw M"
+            android:persistent="true"/>
+
+        <Preference
+            android:key="draw_c"
+            android:title="Draw C"
+            android:persistent="true"/>
+    </PreferenceCategory>
+</PreferenceScreen>

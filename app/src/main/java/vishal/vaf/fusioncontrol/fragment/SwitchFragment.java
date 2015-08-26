@@ -1,66 +1,177 @@
 package vishal.vaf.fusioncontrol.fragment;
 
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.preference.ListPreference;
+import android.preference.Preference;
+import android.preference.PreferenceFragment;
+import android.preference.PreferenceGroup;
+import android.preference.PreferenceScreen;
+import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.Switch;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import vishal.vaf.fusioncontrol.R;
+import vishal.vaf.fusioncontrol.adapters.PackageListAdapter;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SwitchFragment extends Fragment {
+public class SwitchFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
+    private Preference double_tap;
+    private Preference swipe_up;
+    private Preference swipe_down;
+    private Preference swipe_right;
+    private Preference swipe_left;
+    private Preference draw_e;
+    private Preference draw_o;
+    private Preference draw_m;
+    private Preference draw_c;
+    private Preference draw_w;
+
+    private PackageListAdapter mPackageAdapter;
+    private PackageManager mPackageManager;
 
     public SwitchFragment() {
         // Required empty public constructor
     }
 
-    SharedPreferences setOnBootSettings;
-    public static final String SOB_PREFS_NAME = "SetOnBoot";
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
+        // Load the preferences from an XML resource
+        addPreferencesFromResource(R.xml.gesture_switches);
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View rootview = inflater.inflate(R.layout.fragment_switch, container, false);
+        PreferenceScreen prefSet = getPreferenceScreen();
 
-        Switch sw1 = (Switch) rootview.findViewById(R.id.switch1);
-        Switch sw2 = (Switch) rootview.findViewById(R.id.switch2);
-        Switch sw3 = (Switch) rootview.findViewById(R.id.switch3);
-        Switch sw4 = (Switch) rootview.findViewById(R.id.switch4);
-        Switch sw5 = (Switch) rootview.findViewById(R.id.switch5);
-        Switch sw6 = (Switch) rootview.findViewById(R.id.switch6);
-        Switch sw7 = (Switch) rootview.findViewById(R.id.switch7);
-        Switch sw8 = (Switch) rootview.findViewById(R.id.switch8);
-        Switch sw9 = (Switch) rootview.findViewById(R.id.switch9);
-        Switch sw10 = (Switch) rootview.findViewById(R.id.switch10);
-        Switch sw11 = (Switch) rootview.findViewById(R.id.switch11);
+        double_tap = findPreference("double_tap");
+        double_tap.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                onCreateDialog(double_tap);
+                return false;
+            }
+        });
+        swipe_up = findPreference("swipe_up");
+        swipe_up.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                onCreateDialog(swipe_up);
+                return false;
+            }
+        });
+        swipe_down = findPreference("swipe_down");
+        swipe_down.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                onCreateDialog(swipe_down);
+                return false;
+            }
+        });
+        swipe_right = findPreference("swipe_right");
+        swipe_right.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                onCreateDialog(swipe_right);
+                return false;
+            }
+        });
+        swipe_left = findPreference("swipe_left");
+        swipe_left.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                onCreateDialog(swipe_left);
+                return false;
+            }
+        });
+        draw_e = findPreference("draw_e");
+        draw_e.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                onCreateDialog(draw_e);
+                return false;
+            }
+        });
+        draw_o = findPreference("draw_o");
+        draw_o.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                onCreateDialog(draw_o);
+                return false;
+            }
+        });
+        draw_m = findPreference("draw_m");
+        draw_m.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                onCreateDialog(draw_m);
+                return false;
+            }
+        });
+        draw_c = findPreference("draw_c");
+        draw_c.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                onCreateDialog(draw_c);
+                return false;
+            }
+        });
+        draw_w = findPreference("draw_w");
+        draw_w.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                onCreateDialog(draw_w);
+                return false;
+            }
+        });
 
-        setOnBootSettings = getActivity().getSharedPreferences(SOB_PREFS_NAME, Context.MODE_PRIVATE);
+        // Get launch-able applications
 
-        if (setOnBootSettings != null) {
-            sw1.setChecked(setOnBootSettings.getBoolean("double_click", false));
-            sw2.setChecked(setOnBootSettings.getBoolean("up", false));
-            sw3.setChecked(setOnBootSettings.getBoolean("down", false));
-            sw4.setChecked(setOnBootSettings.getBoolean("right", false));
-            sw5.setChecked(setOnBootSettings.getBoolean("left", false));
-            sw6.setChecked(setOnBootSettings.getBoolean("e", false));
-            sw7.setChecked(setOnBootSettings.getBoolean("o", false));
-            sw8.setChecked(setOnBootSettings.getBoolean("w", false));
-            sw9.setChecked(setOnBootSettings.getBoolean("m", false));
-            sw10.setChecked(setOnBootSettings.getBoolean("c", false));
-            sw11.setChecked(setOnBootSettings.getBoolean("checked", false));
-        }
-
-        return rootview;
+        mPackageManager = getActivity().getPackageManager();
+        mPackageAdapter = new PackageListAdapter(getActivity());
     }
 
+    public void onCreateDialog(final Preference preference) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        final Dialog dialog;
+                final ListView list = new ListView(getActivity());
+                list.setAdapter(mPackageAdapter);
+
+                builder.setTitle("Choose App");
+                builder.setView(list);
+                dialog = builder.create();
+
+                list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        // Add empty application definition, the user will be able to edit it later
+                        PackageListAdapter.PackageItem info = (PackageListAdapter.PackageItem) parent.getItemAtPosition(position);
+                        //addCustomApplicationPref(info.packageName);
+                        Log.d("Fusion", info.packageName);
+                        preference.setSummary(info.title);
+                        preference.setIcon(info.icon);
+                        dialog.cancel();
+                    }
+                });
+        dialog.show();
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+
+    }
 }

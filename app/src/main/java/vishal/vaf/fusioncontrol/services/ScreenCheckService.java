@@ -37,7 +37,7 @@ public class ScreenCheckService extends Service {
                 packageManager = context.getPackageManager();
                 if (resp.contains("double click"))
                 {
-                    Intent intent2 = packageManager.getLaunchIntentForPackage("");
+                    Intent intent2 = packageManager.getLaunchIntentForPackage("org.cyanogenmod.audiofx");
                     context.startActivity(intent2);
                 }
             }
