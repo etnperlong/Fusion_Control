@@ -2,35 +2,27 @@ package vishal.vaf.fusioncontrol.fragment;
 
 
 import android.app.Dialog;
+import android.app.KeyguardManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
-import android.preference.PreferenceGroup;
+import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Switch;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import vishal.vaf.fusioncontrol.R;
 import vishal.vaf.fusioncontrol.adapters.PackageListAdapter;
+import vishal.vaf.fusioncontrol.checkutils.CheckUtils;
 
-/**
- * A simple {@link Fragment} subclass.
- */
-public class SwitchFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+
+public class SwitchFragment extends PreferenceFragment {
 
     private Preference double_tap;
     private Preference swipe_up;
@@ -45,6 +37,11 @@ public class SwitchFragment extends PreferenceFragment implements SharedPreferen
 
     private PackageListAdapter mPackageAdapter;
     private PackageManager mPackageManager;
+
+    KeyguardManager manager;
+    KeyguardManager.KeyguardLock lock;
+
+    CheckUtils checkUtils;
 
     public SwitchFragment() {
         // Required empty public constructor
@@ -62,7 +59,7 @@ public class SwitchFragment extends PreferenceFragment implements SharedPreferen
         double_tap.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                onCreateDialog(double_tap);
+                onCreateDialog(double_tap, "double_click");
                 return false;
             }
         });
@@ -70,7 +67,7 @@ public class SwitchFragment extends PreferenceFragment implements SharedPreferen
         swipe_up.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                onCreateDialog(swipe_up);
+                onCreateDialog(swipe_up, "up");
                 return false;
             }
         });
@@ -78,7 +75,7 @@ public class SwitchFragment extends PreferenceFragment implements SharedPreferen
         swipe_down.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                onCreateDialog(swipe_down);
+                onCreateDialog(swipe_down, "down");
                 return false;
             }
         });
@@ -86,7 +83,7 @@ public class SwitchFragment extends PreferenceFragment implements SharedPreferen
         swipe_right.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                onCreateDialog(swipe_right);
+                onCreateDialog(swipe_right, "right");
                 return false;
             }
         });
@@ -94,7 +91,7 @@ public class SwitchFragment extends PreferenceFragment implements SharedPreferen
         swipe_left.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                onCreateDialog(swipe_left);
+                onCreateDialog(swipe_left, "left");
                 return false;
             }
         });
@@ -102,7 +99,7 @@ public class SwitchFragment extends PreferenceFragment implements SharedPreferen
         draw_e.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                onCreateDialog(draw_e);
+                onCreateDialog(draw_e, "e");
                 return false;
             }
         });
@@ -110,7 +107,7 @@ public class SwitchFragment extends PreferenceFragment implements SharedPreferen
         draw_o.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                onCreateDialog(draw_o);
+                onCreateDialog(draw_o, "o");
                 return false;
             }
         });
@@ -118,7 +115,7 @@ public class SwitchFragment extends PreferenceFragment implements SharedPreferen
         draw_m.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                onCreateDialog(draw_m);
+                onCreateDialog(draw_m, "m");
                 return false;
             }
         });
@@ -126,7 +123,7 @@ public class SwitchFragment extends PreferenceFragment implements SharedPreferen
         draw_c.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                onCreateDialog(draw_c);
+                onCreateDialog(draw_c, "c");
                 return false;
             }
         });
@@ -134,7 +131,7 @@ public class SwitchFragment extends PreferenceFragment implements SharedPreferen
         draw_w.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                onCreateDialog(draw_w);
+                onCreateDialog(draw_w, "w");
                 return false;
             }
         });
@@ -145,7 +142,7 @@ public class SwitchFragment extends PreferenceFragment implements SharedPreferen
         mPackageAdapter = new PackageListAdapter(getActivity());
     }
 
-    public void onCreateDialog(final Preference preference) {
+    public void onCreateDialog(final Preference preference, final String preferenceString) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         final Dialog dialog;
                 final ListView list = new ListView(getActivity());
@@ -161,7 +158,14 @@ public class SwitchFragment extends PreferenceFragment implements SharedPreferen
                         // Add empty application definition, the user will be able to edit it later
                         PackageListAdapter.PackageItem info = (PackageListAdapter.PackageItem) parent.getItemAtPosition(position);
                         //addCustomApplicationPref(info.packageName);
-                        Log.d("Fusion", info.packageName);
+                        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                        SharedPreferences.Editor edit = sharedPreferences.edit();
+                        edit.remove(preferenceString);
+                        edit.putString(preferenceString, info.packageName).apply();
+                        edit.apply();
+                        checkUtils = new CheckUtils();
+                        checkUtils.setGesture(preferenceString, true);
+                        unlockScreen();
                         preference.setSummary(info.title);
                         preference.setIcon(info.icon);
                         dialog.cancel();
@@ -170,8 +174,9 @@ public class SwitchFragment extends PreferenceFragment implements SharedPreferen
         dialog.show();
     }
 
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-
+    public void unlockScreen() {
+        manager = (KeyguardManager) getActivity().getSystemService(Context.KEYGUARD_SERVICE);
+        lock = manager.newKeyguardLock("One");
+        lock.disableKeyguard();
     }
 }

@@ -26,6 +26,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
@@ -58,18 +59,13 @@ public class MainActivity extends ActionBarActivity {
     SwitchFragment switchFragment;
     AboutFragment aboutFragment;
     FragmentManager fragmentManager;
-    KeyguardManager manager;
-    KeyguardManager.KeyguardLock lock;
-    SharedPreferences setOnBootSettings;
     ActionBarDrawerToggle actionBarDrawerToggle;
     ActionBar actionBar;
-    ProgressDialog progress;
 
     private String[] navDrawList;
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private CharSequence mTitle;
-    public static final String SOB_PREFS_NAME = "SetOnBoot";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +83,7 @@ public class MainActivity extends ActionBarActivity {
 
         startService(this);
 
-        /*if(!check.isDeviceSupported())
+        if(!check.isDeviceSupported())
         {
             AlertDialog.Builder support = new AlertDialog.Builder(this);
             support.setTitle("Unsupported Device !! ");
@@ -121,7 +117,7 @@ public class MainActivity extends ActionBarActivity {
                         }
                 );
                 noRootAlert.show();
-            }*/
+            }
     }
 
     public void populateCardView()
@@ -243,82 +239,5 @@ public class MainActivity extends ActionBarActivity {
         actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeButtonEnabled(true);
-    }
-
-    public void unlockScreen() {
-        manager = (KeyguardManager) this.getSystemService(Context.KEYGUARD_SERVICE);
-        lock = manager.newKeyguardLock("One");
-        lock.disableKeyguard();
-    }
-
-    public void onChecked(final View view)
-    {
-        boolean state = ((Switch) view).isChecked();
-        setOnBootSettings = getSharedPreferences(SOB_PREFS_NAME, Context.MODE_PRIVATE);
-        final SharedPreferences.Editor editor = setOnBootSettings.edit();
-
-        if (state)
-        {
-            AlertDialog.Builder support = new AlertDialog.Builder(this);
-            support.setTitle("Warning !! ");
-            support.setMessage("Switching on Direct Unlock disables pattern or password lock as well.");
-            support.setCancelable(false);
-            support.setNegativeButton(
-                    "Exit",
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            editor.putBoolean("checked", false);
-                            editor.apply();
-                            ((Switch) view).setChecked(false);
-                        }
-                    }
-            );
-            support.setPositiveButton(
-                    "Go Ahead",
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            unlockScreen();
-                            editor.putBoolean("checked", true);
-                            editor.apply();
-                        }
-                    }
-            );
-            support.create();
-            support.show();
-        }
-        else
-        {
-            AlertDialog.Builder support = new AlertDialog.Builder(this);
-            support.setTitle("Reboot Required !! ");
-            support.setMessage("Your device needs to be rebooted to re-enable lockscreen");
-            support.setCancelable(false);
-            support.setNegativeButton(
-                    "Reboot later",
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            editor.putBoolean("checked", false);
-                            editor.apply();
-                        }
-                    }
-            );
-            support.setPositiveButton(
-                    "Reboot now",
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            progress = ProgressDialog.show(MainActivity.this, "",
-                                    "Rebooting",false);
-                            editor.putBoolean("checked", false);
-                            editor.apply();
-                            check.reboot();
-                        }
-                    }
-            );
-            support.create();
-            support.show();
-        }
     }
 }
