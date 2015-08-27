@@ -23,6 +23,7 @@ import android.util.Log;
 
 import vishal.vaf.fusioncontrol.checkutils.CheckUtils;
 import vishal.vaf.fusioncontrol.checkutils.GesturePreferences;
+import vishal.vaf.fusioncontrol.services.ScreenCheckService;
 
 /**
  * Created by vishal on 15/3/15.
@@ -84,9 +85,9 @@ public class BootReceiver extends BroadcastReceiver {
             {
                 cu.setGesture("c", true);
             }
-            if(main.isUnlockChecked(context))
+            if(main.isGestureEnabled(context))
             {
-                Intent i = new Intent(context, DisableKeyguard.class);
+                Intent i = new Intent(context, ScreenCheckService.class);
                 context.startService(i);
             }
         }

@@ -81,8 +81,6 @@ public class MainActivity extends ActionBarActivity {
 
         populateNavDrawList();
 
-        startService(this);
-
         if(!check.isDeviceSupported())
         {
             AlertDialog.Builder support = new AlertDialog.Builder(this);
@@ -129,13 +127,6 @@ public class MainActivity extends ActionBarActivity {
                 .commit();
         setTitle("Fusion Control");
         mTitle = "Fusion Control";
-    }
-
-    public void startService(Context context)
-    {
-        Log.d("Fusion", "Started service");
-        Intent i = new Intent(context, ScreenCheckService.class);
-        context.startService(i);
     }
 
     public void populateNavDrawList()
