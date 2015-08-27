@@ -7,16 +7,14 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.preference.PreferenceScreen;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-
 import vishal.vaf.fusioncontrol.R;
 import vishal.vaf.fusioncontrol.adapters.PackageListAdapter;
 import vishal.vaf.fusioncontrol.checkutils.CheckUtils;
@@ -42,6 +40,7 @@ public class SwitchFragment extends PreferenceFragment {
     KeyguardManager.KeyguardLock lock;
 
     CheckUtils checkUtils;
+    SharedPreferences sharedPreferences;
 
     public SwitchFragment() {
         // Required empty public constructor
@@ -53,13 +52,11 @@ public class SwitchFragment extends PreferenceFragment {
         // Load the preferences from an XML resource
         addPreferencesFromResource(R.xml.gesture_switches);
 
-        PreferenceScreen prefSet = getPreferenceScreen();
-
         double_tap = findPreference("double_tap");
         double_tap.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                onCreateDialog(double_tap, "double_click");
+                onCreateDialog(double_tap, "double_click", "double_click_package");
                 return false;
             }
         });
@@ -67,7 +64,7 @@ public class SwitchFragment extends PreferenceFragment {
         swipe_up.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                onCreateDialog(swipe_up, "up");
+                onCreateDialog(swipe_up, "up", "up_package");
                 return false;
             }
         });
@@ -75,7 +72,7 @@ public class SwitchFragment extends PreferenceFragment {
         swipe_down.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                onCreateDialog(swipe_down, "down");
+                onCreateDialog(swipe_down, "down", "down_package");
                 return false;
             }
         });
@@ -83,7 +80,7 @@ public class SwitchFragment extends PreferenceFragment {
         swipe_right.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                onCreateDialog(swipe_right, "right");
+                onCreateDialog(swipe_right, "right", "right_package");
                 return false;
             }
         });
@@ -91,7 +88,7 @@ public class SwitchFragment extends PreferenceFragment {
         swipe_left.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                onCreateDialog(swipe_left, "left");
+                onCreateDialog(swipe_left, "left", "left_package");
                 return false;
             }
         });
@@ -99,7 +96,7 @@ public class SwitchFragment extends PreferenceFragment {
         draw_e.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                onCreateDialog(draw_e, "e");
+                onCreateDialog(draw_e, "e", "e_package");
                 return false;
             }
         });
@@ -107,7 +104,7 @@ public class SwitchFragment extends PreferenceFragment {
         draw_o.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                onCreateDialog(draw_o, "o");
+                onCreateDialog(draw_o, "o", "o_package");
                 return false;
             }
         });
@@ -115,7 +112,7 @@ public class SwitchFragment extends PreferenceFragment {
         draw_m.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                onCreateDialog(draw_m, "m");
+                onCreateDialog(draw_m, "m", "m_package");
                 return false;
             }
         });
@@ -123,7 +120,7 @@ public class SwitchFragment extends PreferenceFragment {
         draw_c.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                onCreateDialog(draw_c, "c");
+                onCreateDialog(draw_c, "c", "c_package");
                 return false;
             }
         });
@@ -131,18 +128,29 @@ public class SwitchFragment extends PreferenceFragment {
         draw_w.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                onCreateDialog(draw_w, "w");
+                onCreateDialog(draw_w, "w", "w_package");
                 return false;
             }
         });
 
-        // Get launch-able applications
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
+        double_tap.setSummary(sharedPreferences.getString("double_click_package", null));
+        swipe_up.setSummary(sharedPreferences.getString("up_package",null));
+        swipe_down.setSummary(sharedPreferences.getString("down_package",null));
+        swipe_right.setSummary(sharedPreferences.getString("right_package",null));
+        swipe_left.setSummary(sharedPreferences.getString("left_package",null));
+        draw_e.setSummary(sharedPreferences.getString("e_package",null));
+        draw_o.setSummary(sharedPreferences.getString("o_package",null));
+        draw_m.setSummary(sharedPreferences.getString("m_package",null));
+        draw_c.setSummary(sharedPreferences.getString("c_package",null));
+        draw_w.setSummary(sharedPreferences.getString("w_package",null));
 
         mPackageManager = getActivity().getPackageManager();
         mPackageAdapter = new PackageListAdapter(getActivity());
     }
 
-    public void onCreateDialog(final Preference preference, final String preferenceString) {
+    public void onCreateDialog(final Preference preference, final String preferenceString, final String packageName) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         final Dialog dialog;
                 final ListView list = new ListView(getActivity());
@@ -157,17 +165,18 @@ public class SwitchFragment extends PreferenceFragment {
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         // Add empty application definition, the user will be able to edit it later
                         PackageListAdapter.PackageItem info = (PackageListAdapter.PackageItem) parent.getItemAtPosition(position);
-                        //addCustomApplicationPref(info.packageName);
-                        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
                         SharedPreferences.Editor edit = sharedPreferences.edit();
                         edit.remove(preferenceString);
+                        edit.remove(packageName);
                         edit.putString(preferenceString, info.packageName).apply();
+                        edit.putString(packageName, info.title.toString());
                         edit.apply();
                         checkUtils = new CheckUtils();
                         checkUtils.setGesture(preferenceString, true);
                         unlockScreen();
                         preference.setSummary(info.title);
-                        preference.setIcon(info.icon);
+                        Log.d("Fusion", info.title.toString());
                         dialog.cancel();
                     }
                 });

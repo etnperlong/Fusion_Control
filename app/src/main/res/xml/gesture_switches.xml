@@ -2,6 +2,9 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory
         android:title="Gesture Wakeups">
+        <SwitchPreference
+            android:key="enable_gestures"
+            android:title="Enable Gestures" />
         <Preference
             android:key="double_tap"
             android:title="Double Tap"
