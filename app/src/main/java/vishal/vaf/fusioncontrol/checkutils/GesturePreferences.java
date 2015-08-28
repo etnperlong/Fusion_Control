@@ -30,52 +30,52 @@ public class GesturePreferences extends ActionBarActivity{
 
     public boolean isDoubleTapEnabled(Context context) {
         setOnBootSettings = PreferenceManager.getDefaultSharedPreferences(context);
-        return setOnBootSettings.getBoolean("double_click", false);
+        return setOnBootSettings.getBoolean("double_click_boot", false);
     }
 
     public boolean isSwipeUpEnabled(Context context) {
         setOnBootSettings = PreferenceManager.getDefaultSharedPreferences(context);
-        return setOnBootSettings.getBoolean("up", false);
+        return setOnBootSettings.getBoolean("up_boot", false);
     }
 
     public boolean isSwipeDownEnabled(Context context) {
         setOnBootSettings = PreferenceManager.getDefaultSharedPreferences(context);
-        return setOnBootSettings.getBoolean("down", false);
+        return setOnBootSettings.getBoolean("down_boot", false);
     }
 
     public boolean isSwipeRightEnabled(Context context) {
         setOnBootSettings = PreferenceManager.getDefaultSharedPreferences(context);
-        return setOnBootSettings.getBoolean("right", false);
+        return setOnBootSettings.getBoolean("right_boot", false);
     }
 
     public boolean isSwipeLeftEnabled(Context context) {
         setOnBootSettings = PreferenceManager.getDefaultSharedPreferences(context);
-        return setOnBootSettings.getBoolean("left", false);
+        return setOnBootSettings.getBoolean("left_boot", false);
     }
 
     public boolean isDraw_eEnabled(Context context) {
         setOnBootSettings = PreferenceManager.getDefaultSharedPreferences(context);
-        return setOnBootSettings.getBoolean("e", false);
+        return setOnBootSettings.getBoolean("e_boot", false);
     }
 
     public boolean isDraw_oEnabled(Context context) {
         setOnBootSettings = PreferenceManager.getDefaultSharedPreferences(context);
-        return setOnBootSettings.getBoolean("o", false);
+        return setOnBootSettings.getBoolean("o_boot", false);
     }
 
     public boolean isDraw_mEnabled(Context context) {
         setOnBootSettings = PreferenceManager.getDefaultSharedPreferences(context);
-        return setOnBootSettings.getBoolean("m", false);
+        return setOnBootSettings.getBoolean("m_boot", false);
     }
 
     public boolean isDraw_wEnabled(Context context) {
         setOnBootSettings = PreferenceManager.getDefaultSharedPreferences(context);
-        return setOnBootSettings.getBoolean("w", false);
+        return setOnBootSettings.getBoolean("w_boot", false);
     }
 
     public boolean isDraw_cEnabled(Context context) {
         setOnBootSettings = PreferenceManager.getDefaultSharedPreferences(context);
-        return setOnBootSettings.getBoolean("c", false);
+        return setOnBootSettings.getBoolean("c_boot", false);
     }
 
     public boolean isGestureEnabled(Context context) {

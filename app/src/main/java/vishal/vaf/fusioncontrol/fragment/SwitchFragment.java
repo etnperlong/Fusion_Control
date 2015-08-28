@@ -4,6 +4,7 @@ package vishal.vaf.fusioncontrol.fragment;
 import android.app.Dialog;
 import android.app.KeyguardManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -17,10 +18,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Switch;
-
-import java.util.Objects;
-
 import vishal.vaf.fusioncontrol.R;
 import vishal.vaf.fusioncontrol.adapters.PackageListAdapter;
 import vishal.vaf.fusioncontrol.checkutils.CheckUtils;
@@ -70,7 +67,7 @@ public class SwitchFragment extends PreferenceFragment implements Preference.OnP
         double_tap.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                onCreateDialog(double_tap, "double_click", "double_click_package");
+                onCreateDialog(double_tap, "double_click", "double_click_package", "double_click_boot");
                 return false;
             }
         });
@@ -79,7 +76,7 @@ public class SwitchFragment extends PreferenceFragment implements Preference.OnP
         swipe_up.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                onCreateDialog(swipe_up, "up", "up_package");
+                onCreateDialog(swipe_up, "up", "up_package", "up_boot");
                 return false;
             }
         });
@@ -88,7 +85,7 @@ public class SwitchFragment extends PreferenceFragment implements Preference.OnP
         swipe_down.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                onCreateDialog(swipe_down, "down", "down_package");
+                onCreateDialog(swipe_down, "down", "down_package", "down_boot");
                 return false;
             }
         });
@@ -97,7 +94,7 @@ public class SwitchFragment extends PreferenceFragment implements Preference.OnP
         swipe_right.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                onCreateDialog(swipe_right, "right", "right_package");
+                onCreateDialog(swipe_right, "right", "right_package", "right_boot");
                 return false;
             }
         });
@@ -106,7 +103,7 @@ public class SwitchFragment extends PreferenceFragment implements Preference.OnP
         swipe_left.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                onCreateDialog(swipe_left, "left", "left_package");
+                onCreateDialog(swipe_left, "left", "left_package", "left_boot");
                 return false;
             }
         });
@@ -115,7 +112,7 @@ public class SwitchFragment extends PreferenceFragment implements Preference.OnP
         draw_e.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                onCreateDialog(draw_e, "e", "e_package");
+                onCreateDialog(draw_e, "e", "e_package", "e_boot");
                 return false;
             }
         });
@@ -124,7 +121,7 @@ public class SwitchFragment extends PreferenceFragment implements Preference.OnP
         draw_o.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                onCreateDialog(draw_o, "o", "o_package");
+                onCreateDialog(draw_o, "o", "o_package", "o_boot");
                 return false;
             }
         });
@@ -133,7 +130,7 @@ public class SwitchFragment extends PreferenceFragment implements Preference.OnP
         draw_m.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                onCreateDialog(draw_m, "m", "m_package");
+                onCreateDialog(draw_m, "m", "m_package", "m_boot");
                 return false;
             }
         });
@@ -142,7 +139,7 @@ public class SwitchFragment extends PreferenceFragment implements Preference.OnP
         draw_c.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                onCreateDialog(draw_c, "c", "c_package");
+                onCreateDialog(draw_c, "c", "c_package", "c_boot");
                 return false;
             }
         });
@@ -151,13 +148,13 @@ public class SwitchFragment extends PreferenceFragment implements Preference.OnP
         draw_w.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                onCreateDialog(draw_w, "w", "w_package");
+                onCreateDialog(draw_w, "w", "w_package", "w_boot");
                 return false;
             }
         });
 
         double_tap.setSummary(sharedPreferences.getString("double_click_package", null));
-        swipe_up.setSummary(sharedPreferences.getString("up_package",null));
+        swipe_up.setSummary(sharedPreferences.getString("up_package", null));
         swipe_down.setSummary(sharedPreferences.getString("down_package",null));
         swipe_right.setSummary(sharedPreferences.getString("right_package",null));
         swipe_left.setSummary(sharedPreferences.getString("left_package",null));
@@ -171,36 +168,65 @@ public class SwitchFragment extends PreferenceFragment implements Preference.OnP
         mPackageAdapter = new PackageListAdapter(getActivity());
     }
 
-    public void onCreateDialog(final Preference preference, final String preferenceString, final String packageName) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        final Dialog dialog;
+    public void onCreateDialog(final Preference preference, final String preferenceString, final String packageName, final String boot ) {
+
+                        final SharedPreferences.Editor edit = sharedPreferences.edit();
+
+                        AlertDialog.Builder support = new AlertDialog.Builder(getActivity());
+                        support.setTitle("Select Action");
+                        support.setCancelable(true);
+                        support.setNegativeButton("No action", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                preference.setSummary("No action");
+                                edit.remove(packageName);
+                                edit.remove(preferenceString);
+                                edit.remove(boot);
+                                edit.putString(packageName, "No action");
+                                edit.putString(preferenceString, null);
+                                edit.putBoolean(boot, false);
+                                edit.apply();
+                                checkUtils = new CheckUtils();
+                                checkUtils.setGesture(preferenceString, false);
+                            }
+                        });
+        support.setPositiveButton("Select Application", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                final Dialog dialog1;
                 final ListView list = new ListView(getActivity());
                 list.setAdapter(mPackageAdapter);
 
                 builder.setTitle("Choose App");
                 builder.setView(list);
-                dialog = builder.create();
+                dialog1 = builder.create();
 
                 list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        // Add empty application definition, the user will be able to edit it later
+
                         PackageListAdapter.PackageItem info = (PackageListAdapter.PackageItem) parent.getItemAtPosition(position);
 
-                        SharedPreferences.Editor edit = sharedPreferences.edit();
                         edit.remove(preferenceString);
                         edit.remove(packageName);
-                        edit.putString(preferenceString, info.packageName).apply();
+                        edit.remove(boot);
+                        edit.putString(preferenceString, info.packageName);
                         edit.putString(packageName, info.title.toString());
+                        edit.putBoolean(boot, true);
                         edit.apply();
                         checkUtils = new CheckUtils();
                         checkUtils.setGesture(preferenceString, true);
                         preference.setSummary(info.title);
-                        Log.d("Fusion", info.title.toString());
-                        dialog.cancel();
+                        dialog1.cancel();
                     }
                 });
-        dialog.show();
+                dialog1.show();
+            }
+        });
+        support.create();
+        support.show();
     }
 
     public void unlockScreen() {
@@ -237,7 +263,6 @@ public class SwitchFragment extends PreferenceFragment implements Preference.OnP
         if (preference == switchPreference) {
             if (switchPreference.isChecked()) {
                 stopService(getActivity());
-                reLockScreen();
                 edit.putBoolean("gesture_enable", false);
                 double_tap.setEnabled(false);
                 edit.putBoolean("tap_enabled", false);
@@ -262,7 +287,7 @@ public class SwitchFragment extends PreferenceFragment implements Preference.OnP
                 edit.apply();
             } else {
                 startService(getActivity());
-                unlockScreen();
+                edit.putBoolean("checked", true);
                 edit.putBoolean("gesture_enable", true);
                 double_tap.setEnabled(true);
                 edit.putBoolean("tap_enabled", true);

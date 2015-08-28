@@ -37,6 +37,12 @@
             android:enabled="true"
             android:exported="true" >
         </service>
+
+        <activity
+            android:name=".LaunchActivity"
+            android:label="@string/title_activity_launch"
+            android:showOnLockScreen="true">
+        </activity>
     </application>
 
 </manifest>
