@@ -17,44 +17,26 @@
 package vishal.vaf.fusioncontrol;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.KeyguardManager;
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.preference.PreferenceManager;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Switch;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import vishal.vaf.fusioncontrol.adapters.PackageListAdapter;
 import vishal.vaf.fusioncontrol.checkutils.CheckUtils;
 import vishal.vaf.fusioncontrol.fragment.AboutFragment;
 import vishal.vaf.fusioncontrol.fragment.SwitchFragment;
-import vishal.vaf.fusioncontrol.services.ScreenCheckService;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends AppCompatActivity {
 
     CheckUtils check = new CheckUtils();
     SwitchFragment switchFragment;

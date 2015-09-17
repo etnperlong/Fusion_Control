@@ -28,11 +28,6 @@
         </receiver>
 
         <service
-            android:name=".DisableKeyguard"
-            android:enabled="true"
-            android:exported="true" >
-        </service>
-        <service
             android:name=".services.ScreenCheckService"
             android:enabled="true"
             android:exported="true" >
@@ -41,6 +36,8 @@
         <activity
             android:name=".LaunchActivity"
             android:label="@string/title_activity_launch"
+            android:autoRemoveFromRecents="true"
+            android:theme="@style/Dark"
             android:showOnLockScreen="true">
         </activity>
     </application>
