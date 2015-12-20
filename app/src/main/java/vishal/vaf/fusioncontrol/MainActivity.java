@@ -68,8 +68,8 @@ public class MainActivity extends AppCompatActivity {
         if(!check.isDeviceSupported())
         {
             AlertDialog.Builder support = new AlertDialog.Builder(this);
-            support.setTitle("Unsupported Device !! ");
-            support.setMessage("This app is supported only on YU YUREKA!");
+            support.setTitle("不支持的设备！ ");
+            support.setMessage("此应用只适用于 酷派大神F2 全高清/全网通");
             support.setCancelable(false);
             support.setNegativeButton(
                     "Exit",
@@ -86,8 +86,8 @@ public class MainActivity extends AppCompatActivity {
             if(!check.hasRoot())
             {
                 AlertDialog.Builder noRootAlert = new AlertDialog.Builder(this);
-                noRootAlert.setTitle("NO ROOT !! ");
-                noRootAlert.setMessage("Your phone is not rooted or you failed to grant Super User access to the app");
+                noRootAlert.setTitle("无法获取ROOT权限");
+                noRootAlert.setMessage("请确保你已成功获取ROOT权限");
                 noRootAlert.setCancelable(false);
                 noRootAlert.setNegativeButton(
                         "Exit",
@@ -109,8 +109,8 @@ public class MainActivity extends AppCompatActivity {
         fragmentManager.beginTransaction()
                 .add(R.id.switch_card_view, switchFragment)
                 .commit();
-        setTitle("Fusion Control");
-        mTitle = "Fusion Control";
+        setTitle("智能手势");
+        mTitle = "智能手势";
     }
 
     public void populateNavDrawList()
@@ -163,8 +163,8 @@ public class MainActivity extends AppCompatActivity {
                         .replace(R.id.switch_card_view, switchFragment)
                         .commit();
                 mDrawerList.setItemChecked(position, true);
-                setTitle("Fusion Control");
-                mTitle = "Fusion Control";
+                setTitle("智能手势");
+                mTitle = "智能手势";
                 mDrawerLayout.closeDrawer(mDrawerList);
             }
             break;

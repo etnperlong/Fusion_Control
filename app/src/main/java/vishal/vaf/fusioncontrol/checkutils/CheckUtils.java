@@ -26,6 +26,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import android.app.*;
 
 /**
  * Created by vishal on 13/3/15.
@@ -56,7 +57,7 @@ public class CheckUtils {
 
     public boolean isDeviceSupported()
     {
-        if (Build.MODEL.equals("AO5510") | Build.DEVICE.equals("YUREKA") || Build.PRODUCT.equals("YUREKA"))
+        if ( Build.DEVICE.equals("cp8675") || Build.PRODUCT.equals("cp8675"))
         {
             Log.d(tag, "supported");
             return true;
@@ -159,7 +160,7 @@ public class CheckUtils {
 
         String res = "";
         //the format command
-        String[] command = new String[]{ "dmesg | grep \"<<-GTP-INFO->>\" | tail -4 > /sdcard/dmesg.txt"};
+        String[] command = new String[]{ "dmesg | grep \"<<-GTP-INFO->>\" | tail -6 > /sdcard/dmesg.txt"};
 
         //Calling su, because nothing happens, if you aren't, the SuperUser. Hahahaha!
         try {
@@ -194,6 +195,7 @@ public class CheckUtils {
 
             while ((line = br.readLine()) != null) {
                 text.append(line);
+				//mod
             }
             br.close();
         }

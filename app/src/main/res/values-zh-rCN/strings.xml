@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    * Copyright (C) 2015 Vishal Dubey (vishal_android freak) (yzvishal.vd@gmail.com)
+    *
+    * Licensed under the Apache License, Version 2.0 (the "License");
+    * you may not use this file except in compliance with the License.
+    * You may obtain a copy of the License at
+    *
+    *      http://www.apache.org/licenses/LICENSE-2.0
+    *
+    * Unless required by applicable law or agreed to in writing, software
+    * distributed under the License is distributed on an "AS IS" BASIS,
+    * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    * See the License for the specific language governing permissions and
+    * limitations under the License.
+    -->
+
+<resources>
+    <string name="app_name">智能手势</string>
+    <string name="double_tap">双击</string>
+    <string name="swipe_up">向上划动</string>
+    <string name="swipe_down">向下划动</string>
+    <string name="swipe_right">向右划动</string>
+    <string name="swipe_left">Swipe Left</string>
+    <string name="draw_e">画 \'e\'</string>
+    <string name="draw_o">画 \'o\'</string>
+    <string name="draw_w">画 \'w\'</string>
+    <string name="draw_c">画 \'c\'</string>
+    <string name="draw_m">画 \'m\'</string>
+    <string name="card_title">手势唤醒</string>
+    <string name="action_about">关于</string>
+    <string name="title_activity_about">关于</string>
+    <string name="open">Fusion Control is licensed under the Apache License, Version 2.0. More about License on my Github</string>
+    <string-array name="nav_draw_list">
+        <item>手势</item>
+        <item>关于</item>
+    </string-array>
+
+    <string name="action_settings">设置</string>
+    <string name="title_activity_settings">设置</string>
+    <string name="title_activity_launch">启动应用</string>
+
+</resources>

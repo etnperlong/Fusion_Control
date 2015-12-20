@@ -46,7 +46,7 @@ public class LaunchActivity extends AppCompatActivity {
 
         String resp = checkUtils.getResponse();
 
-        if (resp.contains("double click")) {
+        if (resp.contains("Slide(0xcc)")) {
             yo = sharedPreferences.getString("double_click", null);
             if (yo != null) {
                 new Handler().postDelayed(new Runnable() {
@@ -59,7 +59,7 @@ public class LaunchActivity extends AppCompatActivity {
                     }
                 }, 30L);
             }
-        } else if (resp.contains("Slide(0xAA)"))
+        } else if (resp.contains("Slide(0xaa)"))
         {
             yo = sharedPreferences.getString("right", null);
             if (yo != null ) {
@@ -73,7 +73,7 @@ public class LaunchActivity extends AppCompatActivity {
                     }
                 }, 30L);
             }
-        } else if (resp.contains("Slide(0xBB"))
+        } else if (resp.contains("Slide(0xbb"))
         {
             yo = sharedPreferences.getString("left", null);
             if (yo != null ) {
@@ -87,7 +87,7 @@ public class LaunchActivity extends AppCompatActivity {
                     }
                 }, 30L);
             }
-        } else if (resp.contains("Slide(0xBA)"))
+        } else if (resp.contains("Slide(0xba)"))
         {
             yo = sharedPreferences.getString("up", null);
             if (yo != null ) {
@@ -115,7 +115,7 @@ public class LaunchActivity extends AppCompatActivity {
                     }
                 }, 30L);
             }
-        } else if (resp.contains("Slide(0xAB)"))
+        } else if (resp.contains("Slide(0xab)"))
         {
             yo = sharedPreferences.getString("down", null);
             if (yo != null ) {
@@ -157,7 +157,7 @@ public class LaunchActivity extends AppCompatActivity {
                     }
                 }, 30L);
             }
-        } else if (resp.contains("Slide(0x6D)"))
+        } else if (resp.contains("Slide(0x6d)"))
         {
             yo = sharedPreferences.getString("m", null);
             if (yo != null ) {
@@ -171,7 +171,7 @@ public class LaunchActivity extends AppCompatActivity {
                     }
                 }, 30L);
             }
-        } else if (resp.contains("Slide(0x6F)"))
+        } else if (resp.contains("Slide(0x6f)"))
         {
             yo = sharedPreferences.getString("o", null);
             if (yo != null ) {
