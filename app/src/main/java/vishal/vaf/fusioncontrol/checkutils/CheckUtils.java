@@ -57,7 +57,7 @@ public class CheckUtils {
 
     public boolean isDeviceSupported()
     {
-        if ( Build.DEVICE.equals("cp8675") || Build.PRODUCT.equals("cp8675"))
+        if ( Build.DEVICE.equals("8675-FHD") || Build.PRODUCT.equals("8675-FHD"))
         {
             Log.d(tag, "supported");
             return true;

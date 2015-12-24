@@ -24,6 +24,8 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.WindowManager;
+import android.os.PowerManager;
+import android.content.Context;
 
 import vishal.vaf.fusioncontrol.checkutils.CheckUtils;
 
@@ -32,7 +34,16 @@ public class LaunchActivity extends AppCompatActivity {
     CheckUtils checkUtils;
     PackageManager packageManager;
     String yo;
-
+	
+	//Add a wakelock
+	private PowerManager.WakeLock mWakeLock;
+	
+	
+	private void wakePhoneUp() {
+        mWakeLock.acquire();
+        mWakeLock.release();
+    }
+	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +54,11 @@ public class LaunchActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         checkUtils = new CheckUtils();
         packageManager = this.getPackageManager();
+		
+        PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        int flags = PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP;
+        mWakeLock = powerManager.newWakeLock(flags, "GestureWakeUp");
+		
 
         String resp = checkUtils.getResponse();
 
@@ -53,6 +69,7 @@ public class LaunchActivity extends AppCompatActivity {
 
                     @Override
                     public void run() {
+						wakePhoneUp();
                         Intent intent2 = packageManager.getLaunchIntentForPackage(yo);
                         startActivity(intent2);
                         finish();
@@ -67,6 +84,7 @@ public class LaunchActivity extends AppCompatActivity {
 
                     @Override
                     public void run() {
+						wakePhoneUp();
                         Intent intent2 = packageManager.getLaunchIntentForPackage(yo);
                         startActivity(intent2);
                         finish();
@@ -81,6 +99,7 @@ public class LaunchActivity extends AppCompatActivity {
 
                     @Override
                     public void run() {
+						wakePhoneUp();
                         Intent intent2 = packageManager.getLaunchIntentForPackage(yo);
                         startActivity(intent2);
                         finish();
@@ -95,6 +114,7 @@ public class LaunchActivity extends AppCompatActivity {
 
                     @Override
                     public void run() {
+						wakePhoneUp();
                         Intent intent2 = packageManager.getLaunchIntentForPackage(yo);
                         startActivity(intent2);
                         finish();
@@ -109,6 +129,7 @@ public class LaunchActivity extends AppCompatActivity {
 
                     @Override
                     public void run() {
+						wakePhoneUp();
                         Intent intent2 = packageManager.getLaunchIntentForPackage(yo);
                         startActivity(intent2);
                         finish();
@@ -123,6 +144,7 @@ public class LaunchActivity extends AppCompatActivity {
 
                     @Override
                     public void run() {
+						wakePhoneUp();
                         Intent intent2 = packageManager.getLaunchIntentForPackage(yo);
                         startActivity(intent2);
                         finish();
@@ -137,6 +159,7 @@ public class LaunchActivity extends AppCompatActivity {
 
                     @Override
                     public void run() {
+						wakePhoneUp();
                         Intent intent2 = packageManager.getLaunchIntentForPackage(yo);
                         startActivity(intent2);
                         finish();
@@ -151,6 +174,7 @@ public class LaunchActivity extends AppCompatActivity {
 
                     @Override
                     public void run() {
+						wakePhoneUp();
                         Intent intent2 = packageManager.getLaunchIntentForPackage(yo);
                         startActivity(intent2);
                         finish();
@@ -165,6 +189,7 @@ public class LaunchActivity extends AppCompatActivity {
 
                     @Override
                     public void run() {
+						wakePhoneUp();
                         Intent intent2 = packageManager.getLaunchIntentForPackage(yo);
                         startActivity(intent2);
                         finish();
@@ -179,6 +204,7 @@ public class LaunchActivity extends AppCompatActivity {
 
                     @Override
                     public void run() {
+						wakePhoneUp();
                         Intent intent2 = packageManager.getLaunchIntentForPackage(yo);
                         startActivity(intent2);
                         finish();
