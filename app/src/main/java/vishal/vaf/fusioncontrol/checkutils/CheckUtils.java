@@ -160,7 +160,7 @@ public class CheckUtils {
 
         String res = "";
         //the format command
-        String[] command = new String[]{ "dmesg | grep \"<<-GTP-INFO->>\" | tail -6 > /sdcard/dmesg.txt"};
+        String[] command = new String[]{ "dmesg | grep \"<<-GTP-INFO->>\" | tail -6 > /data/data/vishal.vaf.fusioncontrol/dmesg.txt"};
 
         //Calling su, because nothing happens, if you aren't, the SuperUser. Hahahaha!
         try {
@@ -186,7 +186,7 @@ public class CheckUtils {
             e.printStackTrace();
         }
 
-        File f = new File("/sdcard/dmesg.txt");
+        File f = new File("/data/data/vishal.vaf.fusioncontrol/dmesg.txt");
 
         StringBuilder text = new StringBuilder();
         String line= "";
